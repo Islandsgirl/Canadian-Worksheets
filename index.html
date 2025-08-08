@@ -2,781 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Canadian Worksheets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom Math Worksheet Generator</title>
   <style>
-    :root{
-      --bg:#f8f9fa;--card:#fff;--text:#2c3e50;--muted:#666;--border:#ccd2d9;--accent:#2d7ff9;--ok:#27ae60;--warn:#ff8c00
-    }
-    *{box-sizing:border-box}
-    body {font-family: Arial, sans-serif;margin: 2rem;background-color: var(--bg);color:var(--text)}
-    h1 {color: var(--text);margin:0 0 1rem}
-    h2 {margin-top: 2rem}
-    label, select, input, button, textarea {display: block;margin-top: .6rem;font-size: 1rem}
-    textarea{width:100%;min-height:70px}
-    .section {padding: 1.25rem;background: var(--card);border: 1px solid var(--border);margin-bottom: 2rem;border-radius:8px}
-    .row{display:flex;flex-wrap:wrap;gap:1rem}
-    .col{min-width:220px;flex:1}
-    .controls-inline {display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
-    .btn{background:var(--accent);color:#fff;border:0;padding:.6rem .9rem;border-radius:6px;cursor:pointer}
-    .btn.secondary{background:#6c757d}
-    .btn.success{background:var(--ok)}
-    .btn.ghost{background:#e9eef9;color:#1b3b88}
-    .muted{color:var(--muted);font-size:.9rem}
-
-    /* Category cards */
-    .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-    .card{background:#fff;border:1px solid var(--border);padding:1rem;border-radius:8px}
-    .card h3{margin:.2rem 0 .4rem}
-    .pill{display:inline-block;background:#eef;border:1px solid #99a;padding:.1rem .45rem;border-radius:999px;font-size:.85rem;margin:.1rem .25rem 0 0;cursor:pointer}
-
-    /* Worksheet rendering */
-    .worksheet-preview {margin-top: 2rem}
-    .ack{border:1px dashed #9bb3ff;background:#f4f7ff;padding:10px;border-radius:8px;margin:0 0 1rem 0}
-    .page{page-break-after:always;border:1px solid var(--border);background:#fff;margin:0 0 1.25rem;padding:1rem;border-radius:8px}
-    .page:last-child{page-break-after:auto}
-    .worksheet-header {display:flex;justify-content:space-between;margin-bottom: .75rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
-    .worksheet-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: .9rem;font-size: 1.12rem}
-    .problem{min-height:2.4rem;border-bottom:1px dashed #ddd;padding:.2rem .25rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
-    .decor{opacity:.95;font-size:1.1rem}
-    .thumb{height:24px;width:24px;object-fit:cover;border-radius:4px;border:1px solid #ddd}
-    .answer-key{margin-top:1rem;border-top:2px solid #999;padding-top:.75rem}
-
-    footer {margin-top: 3rem;font-size: 0.9rem;color: var(--muted)}
+    body { font-family: Arial, sans-serif; margin: 1rem; background: #f8f9fa; }
+    h1 { text-align: center; }
+    .section { background: #fff; padding: 1rem; margin: 1rem 0; border-radius: 10px; box-shadow: 0 0 4px #ccc; }
+    label { display: block; margin-top: .5rem; font-weight: bold; }
+    select, input, button { margin-top: .25rem; padding: .4rem; font-size: 1rem; }
+    button { cursor: pointer; }
+    #worksheet { margin-top: 2rem; padding: 1rem; background: #fff; border-radius: 10px; }
+    .problem { margin: .5rem 0; font-size: 1.1rem; }
+    .img-icon { width: 24px; height: 24px; vertical-align: middle; }
   </style>
 </head>
 <body>
-  <h1>🌐 Canadian Worksheet Generator</h1>
 
-  <!-- LANGUAGE ARTS (link out to reading.html) -->
-  <div class="section">
-    <h2>📚 Language Arts</h2>
-    <p class="muted">Short, student-friendly news with multi‑level activities.</p>
-    <div class="controls-inline">
-      <a class="btn secondary" href="reading.html">Open Reading Comprehension</a>
-    </div>
-  </div>
+<h1>🧮 Custom Math Worksheet Generator</h1>
 
-  <!-- MATH LANDING: user‑friendly categories -->
-  <div class="section">
-    <h2>➗ Math: Choose a Section</h2>
-    <div class="grid-cards">
-      <div class="card">
-        <h3>Basic Operations</h3>
-        <div>
-          <button class="pill" data-type="add">Addition</button>
-          <button class="pill" data-type="sub">Subtraction</button>
-          <button class="pill" data-type="mul">Multiplication</button>
-          <button class="pill" data-type="div">Division</button>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Measurement</h3>
-        <div>
-          <button class="pill" data-type="measure">Metric Conversions</button>
-          <button class="pill" data-type="time">Telling Time</button>
-          <button class="pill" data-type="thermo">Thermometers</button>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Money & Life Skills</h3>
-        <div>
-          <button class="pill" data-type="money">Money / Currency</button>
-          <button class="pill" data-type="receipts">Add Receipts</button>
-          <button class="pill" data-type="percent">Percent & Discounts</button>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Word Problems</h3>
-        <div>
-          <button class="pill" data-type="word">Simplified Word Problems</button>
-        </div>
-      </div>
-    </div>
-    <p class="muted" style="margin-top:.6rem">Tip: Pick a section above to auto‑select options below. Images are rights‑safe by default; use your own image URLs only if you have permission.</p>
-  </div>
+<div class="section">
+  <label for="type">Math Type</label>
+  <select id="type">
+    <option value="addition">Addition</option>
+    <option value="subtraction">Subtraction</option>
+    <option value="multiplication">Multiplication</option>
+    <option value="division">Division</option>
+    <option value="tellingTime">Telling Time</option>
+    <option value="thermometers">Read Thermometers</option>
+    <option value="measuringCups">Measuring in Cups/Colanders</option>
+    <option value="receipts">Add Up Receipts</option>
+    <option value="percentages">Real-Life Percentages</option>
+    <option value="money">Money (choose currency)</option>
+  </select>
 
-  <!-- MATH OPTIONS -->
-  <div class="section" id="mathSection">
-    <h2 id="mathHeading">Worksheet Options</h2>
-    <div class="row">
-      <div class="col">
-        <label for="mathType">Math type</label>
-        <select id="mathType">
-          <option value="add">Addition</option>
-          <option value="sub">Subtraction</option>
-          <option value="mul">Multiplication</option>
-          <option value="div">Division</option>
-          <option value="money">Money / Currency</option>
-          <option value="measure">Measurement (metric)</option>
-          <option value="time">Telling Time</option>
-          <option value="thermo">Thermometer Reading</option>
-          <option value="receipts">Add Receipts</option>
-          <option value="percent">Percent Problems</option>
-          <option value="word">Word Problems (simplified)</option>
-        </select>
-      </div>
-      <div class="col" id="numRanges">
-        <label for="rangeA">Number range A (min–max)</label>
-        <input id="rangeA" type="text" value="0-20" placeholder="e.g., 0-20" />
-        <span class="muted">Used by +, −, ×, ÷</span>
-        <label for="rangeB">Number range B (min–max)</label>
-        <input id="rangeB" type="text" value="0-20" placeholder="e.g., 0-20" />
-      </div>
-      <div class="col">
-        <label for="pages">Pages</label>
-        <input id="pages" type="number" min="1" max="20" value="1" />
-      </div>
-      <div class="col">
-        <label for="perPage">Problems per page</label>
-        <input id="perPage" type="number" min="6" max="60" value="24" />
-      </div>
-    </div>
+  <label for="numProblems">Number of Problems</label>
+  <input type="number" id="numProblems" value="10" min="1" max="50">
 
-    <!-- MONEY OPTIONS -->
-    <div class="row" id="moneyRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="currency">Currency</label>
-        <select id="currency">
-          <option value="CAD">CAD – $ (Canadian)</option>
-          <option value="USD">USD – $ (United States)</option>
-          <option value="EUR">EUR – € (Euro)</option>
-          <option value="GBP">GBP – £ (Pound)</option>
-          <option value="JPY">JPY – ¥ (Yen)</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="moneyMode">Money problem type</label>
-        <select id="moneyMode">
-          <option value="sum">Count the total value</option>
-          <option value="make">Make this amount</option>
-          <option value="change">Change from amount</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="moneySumStyle">If "Count the total" → style</label>
-        <select id="moneySumStyle">
-          <option value="target">Show a target amount (students write coins/bills)</option>
-          <option value="coins" selected>Show a list of coins/bills (students write the total)</option>
-        </select>
-      </div>
-      <div class="col" id="billCol" style="display:none;">
-        <label for="billGiven">Bill given (for Change)</label>
-        <select id="billGiven"></select>
-      </div>
-    </div>
+  <label for="emojiSelect">Emojis / Images</label>
+  <select id="emojiSelect">
+    <option value="none">None</option>
+    <option value="emoji">Fun Emojis 😃</option>
+    <option value="vgCharacters">Video Game Characters 🎮</option>
+    <option value="sports">Sports 🏀🏈⚽</option>
+  </select>
 
-    <!-- WORD PROBLEM OPTIONS -->
-    <div class="row" id="wordRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="wpLevel">Reading level</label>
-        <select id="wpLevel">
-          <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <label for="wpEmoji">Emoji support</label>
-        <select id="wpEmoji">
-          <option value="many">Many 😊</option>
-          <option value="some" selected>Some 🙂</option>
-          <option value="none">None</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="wpTown">Town / City</label>
-        <input id="wpTown" type="text" placeholder="e.g., Port Hardy" />
-        <label for="wpProvince">Province / State</label>
-        <input id="wpProvince" type="text" placeholder="e.g., BC" />
-        <label for="wpCountry">Country</label>
-        <input id="wpCountry" type="text" placeholder="e.g., Canada" />
-      </div>
-      <div class="col">
-        <label><input type="checkbox" id="wpAckToggle" checked/> Include territorial acknowledgement</label>
-        <label for="wpTerritory">Territory / Nation(s)</label>
-        <input id="wpTerritory" type="text" placeholder="e.g., Kwakwaka'wakw territory"/>
-        <label for="wpLang">Local language (optional)</label>
-        <input id="wpLang" type="text" placeholder="e.g., Kwakʼwala"/>
-        <label for="wpPhrases">Phrases (hello/thanks) — optional</label>
-        <textarea id="wpPhrases" placeholder="e.g., Gilakas’la (hello); Gilakas’la / Háw'aa / HÍSW̱ḴE (thank you)"></textarea>
-      </div>
-    </div>
+  <label for="currencySelect">Currency (for money problems)</label>
+  <select id="currencySelect">
+    <option value="$">USD ($)</option>
+    <option value="C$">CAD (C$)</option>
+    <option value="£">GBP (£)</option>
+    <option value="€">EUR (€)</option>
+    <option value="¥">JPY (¥)</option>
+  </select>
 
-    <!-- TIME OPTIONS -->
-    <div class="row" id="timeRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="timeFormat">Time format</label>
-        <select id="timeFormat">
-          <option value="digital">Digital (HH:MM)</option>
-          <option value="analog">Analog (describe clock)</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="timeStep">Minute steps</label>
-        <select id="timeStep">
-          <option value="5">5 minutes</option>
-          <option value="1">1 minute</option>
-          <option value="15">15 minutes</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="timeSystem">Clock</label>
-        <select id="timeSystem">
-          <option value="12">12‑hour</option>
-          <option value="24">24‑hour</option>
-        </select>
-      </div>
-    </div>
+  <button onclick="generateWorksheet()">Generate Worksheet</button>
+</div>
 
-    <!-- THERMOMETER OPTIONS -->
-    <div class="row" id="thermoRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="tempScale">Temperature scale</label>
-        <select id="tempScale">
-          <option value="C">Celsius (°C)</option>
-          <option value="F">Fahrenheit (°F)</option>
-        </select>
-      </div>
-    </div>
+<div id="worksheet"></div>
 
-    <!-- RECEIPTS OPTIONS -->
-    <div class="row" id="receiptsRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="itemsCount">Items per receipt</label>
-        <input id="itemsCount" type="number" min="2" max="8" value="4" />
-      </div>
-      <div class="col">
-        <label for="taxPct">Sales tax %</label>
-        <input id="taxPct" type="number" min="0" max="25" value="5" />
-        <span class="muted">Set to 0 for no tax</span>
-      </div>
-    </div>
+<script>
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
-    <!-- PERCENT OPTIONS -->
-    <div class="row" id="percentRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="percentKind">Percent scenario</label>
-        <select id="percentKind">
-          <option value="discount">Store discount</option>
-          <option value="tip">Restaurant tip</option>
-          <option value="tax">Sales tax</option>
-          <option value="change">Increase / Decrease</option>
-        </select>
-      </div>
-    </div>
+function generateWorksheet() {
+  const type = document.getElementById("type").value;
+  const num = parseInt(document.getElementById("numProblems").value) || 10;
+  const emojiType = document.getElementById("emojiSelect").value;
+  const currency = document.getElementById("currencySelect").value;
 
-    <!-- DECOR OPTIONS -->
-    <div class="row" style="margin-top:.5rem;">
-      <div class="col">
-        <label for="emojiTheme">Emoji theme (decorations)</label>
-        <select id="emojiTheme">
-          <option value="none">None</option>
-          <option value="animals">Animals 🐾</option>
-          <option value="space">Space 🚀</option>
-          <option value="sports">Sports 🏈</option>
-          <option value="food">Food 🍎</option>
-        </select>
-      </div>
-      <div class="col">
-        <label for="imageTheme">Image theme (safe)</label>
-        <select id="imageTheme">
-          <option value="none">None</option>
-          <option value="public_domain">Public‑domain icons</option>
-        </select>
-        <span class="muted">Avoid copyrighted characters. Use your own images only if you have rights.</span>
-      </div>
-      <div class="col">
-        <label for="customImg">Custom image URL (optional)</label>
-        <input id="customImg" type="text" placeholder="https://… (must have usage rights)" />
-      </div>
-    </div>
+  let worksheetHTML = `<h2>${type} Worksheet</h2>`;
 
-    <div class="controls-inline">
-      <label><input type="checkbox" id="showAnswers"/> Show Answer Key</label>
-      <button class="btn" id="btnGenerate">Generate Worksheet</button>
-      <button class="btn success" id="btnPrint">Print / Save PDF</button>
-      <button class="btn secondary" id="btnSelfTest" title="Run quick checks">Run Self‑Test</button>
-    </div>
-  </div>
-
-  <div class="worksheet-preview" id="worksheet"></div>
-
-  <div id="status" class="section" style="display:none; border-color:#f3c7c7; background:#fff7f7">
-    <strong>Status:</strong>
-    <pre id="statusText" style="white-space:pre-wrap;margin:.5rem 0 0"></pre>
-  </div>
-
-  <footer>
-    <h2>Privacy Policy</h2>
-    <p>This website may use cookies for basic functionality. We do not collect personally identifiable information unless you choose to provide it. We will never sell your data to third parties.</p>
-    <p class="muted">Image use note: Do not upload or embed copyrighted character images unless you own or have permission to use them.</p>
-  </footer>
-
-  <script>
-    // =========== Helpers ==========
-    const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
-    const parseRange=(s,def=[0,20])=>{const m=(s||"").trim().match(/^(\-?\d+)\s*[-–]\s*(\-?\d+)$/);if(!m)return def.map(Number);const a=parseInt(m[1],10),b=parseInt(m[2],10);return a<=b?[a,b]:[b,a]};
-
-    const emojiPacks={
-      none:[],
-      animals:["🦊","🐻","🐱","🐶","🦉","🐰"],
-      space:["🚀","🛰️","🪐","🌌","🛸","🌟"],
-      sports:["⚽","🏀","🏈","🎾","🏒","🥋"],
-      food:["🍎","🍔","🍕","🍣","🍪","🍉"]
-    };
-
-    const pdThumbs=[
-      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Transparent_pixel.png"
-    ];
-
-    const currencyData={
-      CAD:{symbol:"$", code:"CAD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
-      USD:{symbol:"$", code:"USD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
-      EUR:{symbol:"€", code:"EUR", denominations:[200,100,50,20,10,5,2,1,0.5,0.2,0.1]},
-      GBP:{symbol:"£", code:"GBP", denominations:[50,20,10,5,2,1,0.5,0.2,0.1]},
-      JPY:{symbol:"¥", code:"JPY", denominations:[10000,5000,2000,1000,500,100,50,10,5,1]}
-    };
-
-    function formatMoney(val, cur){
-      if(cur==="JPY") return `¥${Math.round(val)}`;
-      return `${currencyData[cur].symbol}${val.toFixed(2)}`;
+  for (let i = 0; i < num; i++) {
+    let problem = "";
+    switch (type) {
+      case "addition":
+        problem = `${getRandomInt(1,50)} + ${getRandomInt(1,50)} = `;
+        break;
+      case "subtraction":
+        let a = getRandomInt(1,50), b = getRandomInt(1,50);
+        problem = `${Math.max(a,b)} - ${Math.min(a,b)} = `;
+        break;
+      case "multiplication":
+        problem = `${getRandomInt(2,12)} × ${getRandomInt(2,12)} = `;
+        break;
+      case "division":
+        let dividend = getRandomInt(2,100);
+        let divisor = getRandomInt(2,10);
+        problem = `${dividend} ÷ ${divisor} = `;
+        break;
+      case "tellingTime":
+        let hour = getRandomInt(1,12);
+        let minute = getRandomInt(0,11) * 5;
+        problem = `What time is shown? 🕒 ${hour}:${minute.toString().padStart(2,'0')}`;
+        break;
+      case "thermometers":
+        problem = `Read the thermometer: ${getRandomInt(-10,40)}°C 🌡️`;
+        break;
+      case "measuringCups":
+        problem = `Measure: ${getRandomInt(1,4)} ${['cup','cups'][getRandomInt(0,1)]} of water 🥣`;
+        break;
+      case "receipts":
+        problem = `Add: ${currency}${getRandomInt(1,20)} + ${currency}${getRandomInt(1,20)} + ${currency}${getRandomInt(1,20)} = `;
+        break;
+      case "percentages":
+        let price = getRandomInt(10,100);
+        let discount = [10,15,20,25,50][getRandomInt(0,4)];
+        problem = `${discount}% off ${currency}${price} = `;
+        break;
+      case "money":
+        problem = `Total: ${currency}${getRandomInt(1,50)} + ${currency}${getRandomInt(1,50)} = `;
+        break;
     }
 
-    function makeChange(amount, cur){
-      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
-      let remaining=amount;const out=[];
-      for(const d of denoms){
-        let cnt=0;
-        if(cur==="JPY"){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
-        else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
-        if(cnt>0) out.push(`${cnt}×${(cur==="JPY"? d: formatMoney(d,cur).replace(/^[$€£]/,''))}`);
-      }
-      return out.join(", ");
+    if (emojiType !== "none") {
+      if (emojiType === "emoji") problem += " 😀🎯";
+      if (emojiType === "vgCharacters") problem += " 🎮👾";
+      if (emojiType === "sports") problem += " 🏀⚽";
     }
 
-    function pickDecor(){
-      const emTheme=document.getElementById('emojiTheme').value;
-      const arr=emojiPacks[emTheme]||[];const em=arr.length?arr[randInt(0,arr.length-1)]:"";
-      const imgTheme=document.getElementById('imageTheme').value;
-      const custom=document.getElementById('customImg').value.trim();
-      let imgSrc="";
-      if(custom) imgSrc=custom; else if(imgTheme==='public_domain') imgSrc=pdThumbs[0];
-      return {em,imgSrc};
-    }
+    worksheetHTML += `<div class="problem">${i+1}. ${problem}</div>`;
+  }
 
-    // =========== Problem generators ==========
-    function genArithmetic(op,aRange,bRange){
-      const [aMin,aMax]=parseRange(aRange);const [bMin,bMax]=parseRange(bRange);
-      const a=randInt(aMin,aMax), b=randInt(bMin,bMax);
-      switch(op){
-        case 'add': return {q:`${a} + ${b} = ____`, a:(a+b)};
-        case 'sub': return {q:`${a} − ${b} = ____`, a:(a-b)};
-        case 'mul': return {q:`${a} × ${b} = ____`, a:(a*b)};
-        case 'div': {
-          const x=randInt(aMin,aMax), y=randInt(Math.max(1,bMin),Math.max(1,bMax));
-          return {q:`${x*y} ÷ ${y} = ____`, a:x};
-        }
-      }
-    }
+  document.getElementById("worksheet").innerHTML = worksheetHTML;
+}
+</script>
 
-    function genMeasurement(){
-      const types=["cm→m","m→cm","g→kg","kg→g","mL→L","L→mL"];
-      const t=types[randInt(0,types.length-1)];
-      switch(t){
-        case "cm→m":{const v=randInt(10,5000);return {q:`Convert ${v} cm to m`, a:(v/100).toFixed(2)+" m"}};
-        case "m→cm":{const v=randInt(1,500);return {q:`Convert ${v} m to cm`, a:(v*100)+" cm"}};
-        case "g→kg":{const v=randInt(100,50000);return {q:`Convert ${v} g to kg`, a:(v/1000).toFixed(2)+" kg"}};
-        case "kg→g":{const v=randInt(1,200);return {q:`Convert ${v} kg to g`, a:(v*1000)+" g"}};
-        case "mL→L":{const v=randInt(100,5000);return {q:`Convert ${v} mL to L`, a:(v/1000).toFixed(2)+" L"}};
-        case "L→mL":{const v=randInt(1,10);return {q:`Convert ${v} L to mL`, a:(v*1000)+" mL"}};
-      }
-    }
-
-    function genTime(){
-      const step=parseInt(document.getElementById('timeStep').value)||5;
-      const system=document.getElementById('timeSystem').value; // '12' or '24'
-      const fmt=document.getElementById('timeFormat').value; // 'digital' | 'analog'
-      const totalMinutes=randInt(0, Math.floor(24*60/step))*step;
-      let h=Math.floor(totalMinutes/60), m=totalMinutes%60;
-      let label;
-      if(system==='12'){
-        const ampm=h>=12? 'PM':'AM';
-        const hh=((h%12)||12).toString().padStart(2,'0');
-        label=`${hh}:${m.toString().padStart(2,'0')} ${ampm}`;
-      } else { label=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
-      if(fmt==='digital') return {q:`What time is this? ${label.replace(/\s?(AM|PM)/,'')}`, a:label};
-      const hourPos=(h%12)+(m/60);
-      const minutePos=m/5; // 12 ticks
-      return {q:`Analog clock: hour hand near ${Math.round(hourPos)}; minute hand on ${minutePos*5} minutes. What time is it?`, a:label};
-    }
-
-    function genThermo(){
-      const scale=document.getElementById('tempScale').value; // C or F
-      const val=(scale==='C')? randInt(-10,40) : randInt(10,105);
-      return {q:`Thermometer reads: ${val} °${scale}. Write the temperature.`, a:`${val}°${scale}`};
-    }
-
-    function genReceipts(){
-      const cur=document.getElementById('currency').value || 'CAD';
-      const items=parseInt(document.getElementById('itemsCount').value)||4;
-      const tax=parseFloat(document.getElementById('taxPct').value)||0;
-      const names=["Apples","Milk","Bread","Pasta","Soup","Bananas","Notebook","Markers","Yogurt","Juice"];
-      let total=0;const lines=[];
-      for(let i=0;i<items;i++){
-        const name=names[randInt(0,names.length-1)];
-        const price=(cur==='JPY'? randInt(50,900) : (randInt(1,120)+randInt(0,99)/100));
-        lines.push(`${name} — ${formatMoney(price,cur)}`);
-        total += price;
-      }
-      const taxAmt = (cur==='JPY'? Math.round(total*tax/100) : +(total*tax/100).toFixed(2));
-      const grand = (cur==='JPY'? Math.round(total+taxAmt) : +(total+taxAmt).toFixed(2));
-      return {q:`🧾 Receipt: ${lines.join('; ')}; Tax ${tax}% → Total = ____`, a:formatMoney(grand,cur)};
-    }
-
-    function genPercent(){
-      const cur=document.getElementById('currency').value || 'CAD';
-      const kind=document.getElementById('percentKind').value; // discount/tip/tax/change
-      if(kind==='discount'){
-        const price=(cur==='JPY'? randInt(500,6000) : (randInt(5,80)+randInt(0,99)/100));
-        const pct=[10,15,20,25,30][randInt(0,4)];
-        const disc=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
-        const final=(cur==='JPY'? Math.round(price-disc) : +(price-disc).toFixed(2));
-        return {q:`Store sale: ${pct}% off ${formatMoney(price,cur)} → Pay ____`, a:formatMoney(final,cur)};
-      } else if(kind==='tip'){
-        const bill=(cur==='JPY'? randInt(800,8000) : (randInt(10,120)+randInt(0,99)/100));
-        const pct=[10,12,15,18,20][randInt(0,4)];
-        const tipAmt=(cur==='JPY'? Math.round(bill*pct/100) : +(bill*pct/100).toFixed(2));
-        const final=(cur==='JPY'? Math.round(bill+tipAmt) : +(bill+tipAmt).toFixed(2));
-        return {q:`Restaurant bill ${formatMoney(bill,cur)} + tip ${pct}% = ____`, a:formatMoney(final,cur)};
-      } else if(kind==='tax'){
-        const price=(cur==='JPY'? randInt(300,9000) : (randInt(5,100)+randInt(0,99)/100));
-        const pct=[5,8,10,12][randInt(0,3)];
-        const taxAmt=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
-        const final=(cur==='JPY'? Math.round(price+taxAmt) : +(price+taxAmt).toFixed(2));
-        return {q:`Item ${formatMoney(price,cur)} + tax ${pct}% = ____`, a:formatMoney(final,cur)};
-      } else { // change
-        const base=(cur==='JPY'? randInt(500,5000) : (randInt(10,200)+randInt(0,99)/100));
-        const pct=[5,10,20,25,30][randInt(0,4)];
-        const dir=Math.random()<0.5? 'increase':'decrease';
-        const delta=(cur==='JPY'? Math.round(base*pct/100) : +(base*pct/100).toFixed(2));
-        const final=(dir==='increase'? (cur==='JPY'? base+delta : +(base+delta).toFixed(2)) : (cur==='JPY'? base-delta : +(base-delta).toFixed(2)));
-        return {q:`A price ${dir}s by ${pct}%. Original ${formatMoney(base,cur)} → New price ____`, a:formatMoney(final,cur)};
-      }
-    }
-
-    function listToText(list, cur){
-      return list.map(p=>`${p.n}×${(cur==='JPY'? p.d : formatMoney(p.d,cur).replace(/^[$€£]/,''))}`).join(', ');
-    }
-
-    function combinationsForAmount(amount, cur){
-      // produce 2-3 varied combinations using a greedy base plus tweaks
-      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
-      const combos=[];
-      function greedy(target){
-        let remaining=target;const picks=[];
-        for(const d of denoms){
-          let cnt=0;
-          if(cur==='JPY'){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
-          else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
-          if(cnt>0)picks.push({d,n:cnt});
-        }
-        return picks;
-      }
-      combos.push(greedy(amount));
-      // tweak 1: replace one higher denom with lower ones
-      if(combos[0].length>0){
-        const first=JSON.parse(JSON.stringify(combos[0]));
-        for(let i=0;i<first.length;i++){
-          if(first[i].n>0){
-            first[i].n=Math.max(0,first[i].n-1);
-            let leftover=first[i].d;
-            for(const d of denoms){
-              if(d>=first[i].d) continue;
-              let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
-              if(cnt>0){
-                const ex=first.find(x=>x.d===d); if(ex) ex.n+=cnt; else first.push({d,n:cnt});
-                if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
-              }
-              if(leftover<=0) break;
-            }
-            break;
-          }
-        }
-        combos.push(first.filter(x=>x.n>0));
-      }
-      // tweak 2: small random recomposition
-      const second=JSON.parse(JSON.stringify(combos[0]||[]));
-      if(second.length){
-        const idx=randInt(0,second.length-1); if(second[idx].n>0){ second[idx].n--; }
-        let leftover=second[idx]? second[idx].d:0;
-        for(let k=denoms.length-1;k>=0;k--){
-          const d=denoms[k];
-          let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
-          if(cnt>0){
-            const ex=second.find(x=>x.d===d); if(ex) ex.n+=cnt; else second.push({d,n:cnt});
-            if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
-          }
-          if(leftover<=0) break;
-        }
-        combos.push(second.filter(x=>x.n>0));
-      }
-      // format
-      return combos.map(c=>listToText(c,cur));
-    }
-
-    function populateBills(cur){
-      const map={
-        CAD:[5,10,20,50,100], USD:[5,10,20,50,100], EUR:[5,10,20,50,100,200], GBP:[5,10,20,50], JPY:[1000,2000,5000,10000]
-      };
-      const sel=document.getElementById('billGiven');
-      sel.innerHTML='';
-      (map[cur]||[10,20,50]).forEach(v=>{
-        const opt=document.createElement('option');
-        opt.value=String(v); opt.textContent=(cur==='JPY'? `¥${v}`: `${currencyData[cur].symbol}${v}`);
-        sel.appendChild(opt);
-      });
-    }
-
-    // Money generator supports both sum styles + multiple combos + configurable bill
-    function genMoney(cur, mode){
-      const sumStyle = (document.getElementById('moneySumStyle')?.value) || 'target';
-      const billSel=document.getElementById('billGiven');
-
-      function randomCombo(){
-        const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
-        const picks=[]; let total=(cur==='JPY'?0:0.0);
-        const count=randInt(2, Math.min(4, denoms.length));
-        const chosen=[...denoms].sort(()=>Math.random()-0.5).slice(0,count);
-        for(const d of chosen){
-          const n=randInt(1,3);
-          picks.push({d,n});
-          if(cur==='JPY') total += d*n; else total = +(total + d*n).toFixed(2);
-        }
-        const list = listToText(picks,cur);
-        return {list,total};
-      }
-
-      if(mode==='sum'){
-        if(sumStyle==='coins'){
-          const combo=randomCombo();
-          return {q:`Coins/Bills: ${combo.list} → Total = ____`, a:formatMoney(combo.total,cur)};
-        } else {
-          const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
-          return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
-        }
-      }
-
-      if(mode==='make'){
-        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
-        const combos=combinationsForAmount(amount,cur);
-        return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:`e.g., ${combos.join(' • ')}`};
-      }
-
-      if(mode==='change'){
-        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
-        let bill = billSel && billSel.value ? parseFloat(billSel.value) : null;
-        if(!bill){
-          // default highest standard bill >= amount
-          const standards = (cur==='JPY'? [1000,2000,5000,10000] : (cur==='EUR'? [5,10,20,50,100,200] : (cur==='GBP'? [5,10,20,50] : [5,10,20,50,100])));
-          bill = standards.find(x=>x>=amount) || standards[standards.length-1];
-        }
-        const change=(cur==='JPY'? bill-amount : +(bill-amount).toFixed(2));
-        return {q:`Change from ${formatMoney(bill,cur)} for a cost of ${formatMoney(amount,cur)}`, a:`${formatMoney(change,cur)} → ${makeChange(change,cur)}`};
-      }
-
-      return {q:'—',a:''};
-    }
-
-    function genWord(){
-      const lvl=document.getElementById('wpLevel').value; // easy/medium/hard
-      const em=document.getElementById('wpEmoji').value; // many/some/none
-      const town=document.getElementById('wpTown').value.trim()||'your town';
-      const prov=document.getElementById('wpProvince').value.trim()||'your province';
-      const country=document.getElementById('wpCountry').value.trim()||'your country';
-      const emMany = (em==='many'); const emSome=(em==='some');
-      const E = (a,b,c)=> em==='none'? a : (emMany? `${a} ${b} ${c}` : `${a} ${b}`);
-      const nums = lvl==='easy'? [3,5,8,10] : lvl==='hard'? [24,30,45,60] : [8,12,15,20];
-
-      const scenarios=[
-        ()=>{ const n1=randInt(1,nums[2]); const n2=randInt(1,nums[1]); return {q:E('At the market in', '🛒', '🍎')+` ${town}, you buy ${n1} apples and ${n2} oranges. How many pieces of fruit is that?`, a:String(n1+n2)};},
-        ()=>{ const mins=randInt(nums[0],nums[3]); return {q:E('You wait for the bus in', '🚌', '🕒')+` ${prov} for ${mins} minutes. If it arrives at 3:00, what time is it now?`, a:`${mins} min before 3:00`};},
-        ()=>{ const t=randInt(8,30); return {q:E('The pool in', '🏊', '🌡️')+` ${town} is ${t}°C. Yesterday it was ${t-3}°C. What is the change in temperature?`, a:`+3°C`};},
-        ()=>{ const price=randInt(2,10); const qty=randInt(2,6); return {q:E('At a snack stand in', '🌭', '💵')+` ${country}, a hot dog is $${price}. You buy ${qty}. What is the cost before tax?`, a:`$${(price*qty).toFixed(2)}`};}
-      ];
-      const pick=scenarios[randInt(0,scenarios.length-1)];
-      return pick();
-    }
-
-    // =========== Render ==========
-    function buildAck(){
-      const on=document.getElementById('wpAckToggle').checked;
-      if(!on) return null;
-      const terr=document.getElementById('wpTerritory').value.trim();
-      const lang=document.getElementById('wpLang').value.trim();
-      const phrases=document.getElementById('wpPhrases').value.trim();
-      const box=document.createElement('div'); box.className='ack';
-      let text=`We acknowledge that we learn on the traditional territory${terr? ' of ' + terr : ''}.`;
-      if(lang) text += ` We offer respect in ${lang}.`;
-      if(phrases) text += ` Phrases: ${phrases}`;
-      box.textContent=text;
-      return box;
-    }
-
-    function buildPage({pageNum,problems,decor}){
-      const page=document.createElement('div');page.className='page';
-      page.innerHTML=`<div class="worksheet-header">
-        <div>Name: __________________</div>
-        <div>Page ${pageNum}</div>
-        <div>Date: __________</div>
-      </div>
-      <div class="worksheet-grid"></div>`;
-      const grid=page.querySelector('.worksheet-grid');
-      for(const p of problems){
-        const row=document.createElement('div');row.className='problem';
-        const left=document.createElement('div');left.textContent=p.q;
-        const right=document.createElement('div');right.className='decor';
-        if(decor.em) right.textContent=decor.em;
-        if(decor.imgSrc){const img=new Image();img.src=decor.imgSrc;img.alt='';img.className='thumb';right.appendChild(img);} 
-        row.appendChild(left);row.appendChild(right);grid.appendChild(row);
-      }
-      return page;
-    }
-
-    function generate(){
-      const showStatus=(msg)=>{const box=document.getElementById('status');const t=document.getElementById('statusText');t.textContent=msg;box.style.display='block'};
-      try{
-        const mathType=document.getElementById('mathType').value;
-        const pages=Math.max(1,parseInt(document.getElementById('pages').value)||1);
-        const perPage=Math.max(1,parseInt(document.getElementById('perPage').value)||24);
-        const showAnswers=document.getElementById('showAnswers').checked;
-        const aRange=document.getElementById('rangeA').value;
-        const bRange=document.getElementById('rangeB').value;
-        const decor=pickDecor();
-        const cur=(document.getElementById('currency')||{value:'CAD'}).value;
-
-        // toggle bill selector visibility for change mode
-        const billCol=document.getElementById('billCol');
-        if(document.getElementById('moneyMode').value==='change' && mathType==='money'){
-          billCol.style.display='block'; populateBills(cur);
-        } else { billCol.style.display='none'; }
-
-        const ws=document.getElementById('worksheet');
-        ws.innerHTML='';
-        if(mathType==='word'){
-          const ack=buildAck(); if(ack) ws.appendChild(ack);
-        }
-        const allAnswers=[];
-
-        for(let pg=1;pg<=pages;pg++){
-          const problems=[];
-          for(let i=0;i<perPage;i++){
-            let item;
-            if(['add','sub','mul','div'].includes(mathType)) item=genArithmetic(mathType,aRange,bRange);
-            else if(mathType==='measure') item=genMeasurement();
-            else if(mathType==='money'){
-              const mode=(document.getElementById('moneyMode')||{value:'sum'}).value;
-              item=genMoney(cur,mode);
-            } else if(mathType==='time') item=genTime();
-            else if(mathType==='thermo') item=genThermo();
-            else if(mathType==='receipts') item=genReceipts();
-            else if(mathType==='percent') item=genPercent();
-            else if(mathType==='word') item=genWord();
-            else { item={q:'—',a:''}; }
-            if(!item||!item.q){ item={q:'(no question generated)', a:''}; }
-            problems.push(item); allAnswers.push(item.a);
-          }
-          ws.appendChild(buildPage({pageNum:pg,problems,decor}));
-        }
-
-        if(showAnswers){
-          const key=document.createElement('div');key.className='answer-key';
-          key.innerHTML='<h3>Answer Key</h3>';
-          const ol=document.createElement('ol');
-          allAnswers.forEach(a=>{const li=document.createElement('li');li.textContent=(a!==undefined&&a!==null)?String(a):'';ol.appendChild(li)});
-          key.appendChild(ol);ws.appendChild(key);
-        }
-        showStatus(`Generated ${pages} page(s) × ${perPage} problems (${mathType}).`);
-      } catch(err){
-        console.error(err);
-        alert('Oops—something went wrong. See the Status panel for details.');
-        const msg = (err && err.stack) ? err.stack : String(err);
-        const box=document.getElementById('status');const t=document.getElementById('statusText');t.textContent=msg;box.style.display='block';
-      }
-    }
-
-    // =========== UI wiring ==========
-    document.querySelectorAll('.pill').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const type=btn.getAttribute('data-type');
-        document.getElementById('mathType').value=type;
-        refreshOptionVisibility();
-        window.scrollTo({top:document.getElementById('mathSection').offsetTop-10, behavior:'smooth'});
-      });
-    });
-
-    function refreshOptionVisibility(){
-      const val=document.getElementById('mathType').value;
-      document.getElementById('moneyRow').style.display = (val==='money' || val==='receipts' || val==='percent') ? 'flex' : 'none';
-      document.getElementById('timeRow').style.display = (val==='time') ? 'flex' : 'none';
-      document.getElementById('thermoRow').style.display = (val==='thermo') ? 'flex' : 'none';
-      document.getElementById('receiptsRow').style.display = (val==='receipts') ? 'flex' : 'none';
-      document.getElementById('percentRow').style.display = (val==='percent') ? 'flex' : 'none';
-      document.getElementById('wordRow').style.display = (val==='word') ? 'flex' : 'none';
-      document.getElementById('numRanges').style.display = (['add','sub','mul','div'].includes(val))? 'block' : 'none';
-      document.getElementById('mathHeading').textContent = `Worksheet Options — ${val}`;
-      const billCol=document.getElementById('billCol');
-      billCol.style.display = (val==='money' && document.getElementById('moneyMode').value==='change')? 'block' : 'none';
-    }
-
-    document.getElementById('mathType').addEventListener('change',refreshOptionVisibility);
-    document.getElementById('moneyMode').addEventListener('change',refreshOptionVisibility);
-    document.getElementById('currency').addEventListener('change',()=>populateBills(document.getElementById('currency').value));
-    document.getElementById('btnGenerate').addEventListener('click',generate);
-    document.getElementById('btnPrint').addEventListener('click',()=>window.print());
-
-    // Self‑test
-    document.getElementById('btnSelfTest').addEventListener('click',()=>{
-      console.clear();
-      console.log('— Self‑Test start —');
-      console.assert(JSON.stringify(parseRange('0-10'))===JSON.stringify([0,10]),'parseRange basic');
-      console.assert(JSON.stringify(parseRange('10-0'))===JSON.stringify([0,10]),'parseRange order');
-      console.assert(typeof genArithmetic('add','0-5','0-5').a==='number','arithmetic answer number');
-      console.assert(typeof genMeasurement().q==='string','measurement question string');
-      console.assert(typeof genTime().a==='string','time answer');
-      console.assert(typeof genThermo().a==='string','thermo answer');
-      console.assert(typeof genReceipts().a==='string','receipts answer');
-      console.assert(typeof genPercent().a==='string','percent answer');
-      // money tests
-      document.getElementById('moneySumStyle').value='target';
-      console.assert(typeof genMoney('CAD','sum').a==='string','money sum target');
-      document.getElementById('moneySumStyle').value='coins';
-      const mcoins=genMoney('CAD','sum');
-      console.assert(mcoins.q.includes('Coins/Bills:'),'money sum coins variant');
-      const mk=genMoney('CAD','make');
-      console.assert(mk.a.includes('e.g.'),'make shows combos');
-      document.getElementById('moneyMode').value='change';
-      populateBills('CAD');
-      const ch=genMoney('CAD','change');
-      console.assert(ch.q.startsWith('Change from') && ch.a.includes('→'),'change with breakdown');
-      document.getElementById('moneyMode').value='sum';
-      // word problems
-      document.getElementById('mathType').value='word';
-      const w=genWord();
-      console.assert(typeof w.q==='string' && w.q.length>10,'word problem generated');
-      console.log('— Self‑Test complete —');
-      alert('Self‑Test complete. Open console for details.');
-      refreshOptionVisibility();
-    });
-
-    // Initialize
-    populateBills(document.getElementById('currency').value);
-    refreshOptionVisibility();
-
-    // Global error trap so silent errors show up in the Status box
-    window.addEventListener('error', (e)=>{
-      const box=document.getElementById('status');const t=document.getElementById('statusText');
-      t.textContent = `Runtime error: ${e.message}\n` + (e.error && e.error.stack ? e.error.stack : '');
-      box.style.display='block';
-    });
-  </script>
 </body>
 </html>
