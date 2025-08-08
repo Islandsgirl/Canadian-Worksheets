@@ -12,7 +12,8 @@
     body {font-family: Arial, sans-serif;margin: 2rem;background-color: var(--bg);color:var(--text)}
     h1 {color: var(--text);margin:0 0 1rem}
     h2 {margin-top: 2rem}
-    label, select, input, button {display: block;margin-top: .6rem;font-size: 1rem}
+    label, select, input, button, textarea {display: block;margin-top: .6rem;font-size: 1rem}
+    textarea{width:100%;min-height:70px}
     .section {padding: 1.25rem;background: var(--card);border: 1px solid var(--border);margin-bottom: 2rem;border-radius:8px}
     .row{display:flex;flex-wrap:wrap;gap:1rem}
     .col{min-width:220px;flex:1}
@@ -27,10 +28,11 @@
     .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
     .card{background:#fff;border:1px solid var(--border);padding:1rem;border-radius:8px}
     .card h3{margin:.2rem 0 .4rem}
-    .pill{display:inline-block;background:#eef;border:1px solid #99a;padding:.1rem .45rem;border-radius:999px;font-size:.85rem;margin:.1rem .25rem 0 0}
+    .pill{display:inline-block;background:#eef;border:1px solid #99a;padding:.1rem .45rem;border-radius:999px;font-size:.85rem;margin:.1rem .25rem 0 0;cursor:pointer}
 
     /* Worksheet rendering */
     .worksheet-preview {margin-top: 2rem}
+    .ack{border:1px dashed #9bb3ff;background:#f4f7ff;padding:10px;border-radius:8px;margin:0 0 1rem 0}
     .page{page-break-after:always;border:1px solid var(--border);background:#fff;margin:0 0 1.25rem;padding:1rem;border-radius:8px}
     .page:last-child{page-break-after:auto}
     .worksheet-header {display:flex;justify-content:space-between;margin-bottom: .75rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
@@ -84,6 +86,12 @@
           <button class="pill" data-type="percent">Percent & Discounts</button>
         </div>
       </div>
+      <div class="card">
+        <h3>Word Problems</h3>
+        <div>
+          <button class="pill" data-type="word">Simplified Word Problems</button>
+        </div>
+      </div>
     </div>
     <p class="muted" style="margin-top:.6rem">Tip: Pick a section above to auto‑select options below. Images are rights‑safe by default; use your own image URLs only if you have permission.</p>
   </div>
@@ -105,6 +113,7 @@
           <option value="thermo">Thermometer Reading</option>
           <option value="receipts">Add Receipts</option>
           <option value="percent">Percent Problems</option>
+          <option value="word">Word Problems (simplified)</option>
         </select>
       </div>
       <div class="col" id="numRanges">
@@ -143,6 +152,52 @@
           <option value="make">Make this amount</option>
           <option value="change">Change from amount</option>
         </select>
+      </div>
+      <div class="col">
+        <label for="moneySumStyle">If "Count the total" → style</label>
+        <select id="moneySumStyle">
+          <option value="target">Show a target amount (students write coins/bills)</option>
+          <option value="coins" selected>Show a list of coins/bills (students write the total)</option>
+        </select>
+      </div>
+      <div class="col" id="billCol" style="display:none;">
+        <label for="billGiven">Bill given (for Change)</label>
+        <select id="billGiven"></select>
+      </div>
+    </div>
+
+    <!-- WORD PROBLEM OPTIONS -->
+    <div class="row" id="wordRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="wpLevel">Reading level</label>
+        <select id="wpLevel">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <label for="wpEmoji">Emoji support</label>
+        <select id="wpEmoji">
+          <option value="many">Many 😊</option>
+          <option value="some" selected>Some 🙂</option>
+          <option value="none">None</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="wpTown">Town / City</label>
+        <input id="wpTown" type="text" placeholder="e.g., Port Hardy" />
+        <label for="wpProvince">Province / State</label>
+        <input id="wpProvince" type="text" placeholder="e.g., BC" />
+        <label for="wpCountry">Country</label>
+        <input id="wpCountry" type="text" placeholder="e.g., Canada" />
+      </div>
+      <div class="col">
+        <label><input type="checkbox" id="wpAckToggle" checked/> Include territorial acknowledgement</label>
+        <label for="wpTerritory">Territory / Nation(s)</label>
+        <input id="wpTerritory" type="text" placeholder="e.g., Kwakwaka'wakw territory"/>
+        <label for="wpLang">Local language (optional)</label>
+        <input id="wpLang" type="text" placeholder="e.g., Kwakʼwala"/>
+        <label for="wpPhrases">Phrases (hello/thanks) — optional</label>
+        <textarea id="wpPhrases" placeholder="e.g., Gilakas’la (hello); Gilakas’la / Háw'aa / HÍSW̱ḴE (thank you)"></textarea>
       </div>
     </div>
 
@@ -274,9 +329,9 @@
     ];
 
     const currencyData={
-      CAD:{symbol:"$", code:"CAD", denominations:[100,25,10,5,1,0.25,0.10,0.05]},
-      USD:{symbol:"$", code:"USD", denominations:[100,50,20,10,5,1,0.25,0.10,0.05]},
-      EUR:{symbol:"€", code:"EUR", denominations:[100,50,20,10,5,2,1,0.5,0.2,0.1]},
+      CAD:{symbol:"$", code:"CAD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
+      USD:{symbol:"$", code:"USD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
+      EUR:{symbol:"€", code:"EUR", denominations:[200,100,50,20,10,5,2,1,0.5,0.2,0.1]},
       GBP:{symbol:"£", code:"GBP", denominations:[50,20,10,5,2,1,0.5,0.2,0.1]},
       JPY:{symbol:"¥", code:"JPY", denominations:[10000,5000,2000,1000,500,100,50,10,5,1]}
     };
@@ -349,7 +404,6 @@
         label=`${hh}:${m.toString().padStart(2,'0')} ${ampm}`;
       } else { label=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
       if(fmt==='digital') return {q:`What time is this? ${label.replace(/\s?(AM|PM)/,'')}`, a:label};
-      // analog description to avoid needing images
       const hourPos=(h%12)+(m/60);
       const minutePos=m/5; // 12 ticks
       return {q:`Analog clock: hour hand near ${Math.round(hourPos)}; minute hand on ${minutePos*5} minutes. What time is it?`, a:label};
@@ -357,7 +411,6 @@
 
     function genThermo(){
       const scale=document.getElementById('tempScale').value; // C or F
-      // choose classroom-friendly temps
       const val=(scale==='C')? randInt(-10,40) : randInt(10,105);
       return {q:`Thermometer reads: ${val} °${scale}. Write the temperature.`, a:`${val}°${scale}`};
     }
@@ -410,28 +463,164 @@
       }
     }
 
-    // *** FIX: define genMoney (was missing) ***
-    function genMoney(cur, mode){
-      // cur is one of CAD, USD, EUR, GBP, JPY
-      // mode: 'sum' | 'make' | 'change'
-      if(cur==='JPY'){
-        const amount=randInt(50,5000); // whole yen
-        if(mode==='sum') return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
-        if(mode==='make') return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:makeChange(amount,cur)};
-        // change
-        const paid=[1000,2000,5000,10000][randInt(0,3)];
-        const change=paid-amount;return {q:`Change from ${formatMoney(paid,cur)} for a cost of ${formatMoney(amount,cur)}`, a:formatMoney(change,cur)};
-      } else {
-        const amount=(randInt(1,50)+randInt(0,99)/100); // up to ~$50.xx
-        if(mode==='sum') return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
-        if(mode==='make') return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:makeChange(amount,cur)};
-        const paid=[5,10,20,50,100][randInt(0,4)];
-        const change=+(paid-amount).toFixed(2);
-        return {q:`Change from ${formatMoney(paid,cur)} for a cost of ${formatMoney(amount,cur)}`, a:formatMoney(change,cur)};
+    function listToText(list, cur){
+      return list.map(p=>`${p.n}×${(cur==='JPY'? p.d : formatMoney(p.d,cur).replace(/^[$€£]/,''))}`).join(', ');
+    }
+
+    function combinationsForAmount(amount, cur){
+      // produce 2-3 varied combinations using a greedy base plus tweaks
+      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+      const combos=[];
+      function greedy(target){
+        let remaining=target;const picks=[];
+        for(const d of denoms){
+          let cnt=0;
+          if(cur==='JPY'){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
+          else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
+          if(cnt>0)picks.push({d,n:cnt});
+        }
+        return picks;
       }
+      combos.push(greedy(amount));
+      // tweak 1: replace one higher denom with lower ones
+      if(combos[0].length>0){
+        const first=JSON.parse(JSON.stringify(combos[0]));
+        for(let i=0;i<first.length;i++){
+          if(first[i].n>0){
+            first[i].n=Math.max(0,first[i].n-1);
+            let leftover=first[i].d;
+            for(const d of denoms){
+              if(d>=first[i].d) continue;
+              let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
+              if(cnt>0){
+                const ex=first.find(x=>x.d===d); if(ex) ex.n+=cnt; else first.push({d,n:cnt});
+                if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
+              }
+              if(leftover<=0) break;
+            }
+            break;
+          }
+        }
+        combos.push(first.filter(x=>x.n>0));
+      }
+      // tweak 2: small random recomposition
+      const second=JSON.parse(JSON.stringify(combos[0]||[]));
+      if(second.length){
+        const idx=randInt(0,second.length-1); if(second[idx].n>0){ second[idx].n--; }
+        let leftover=second[idx]? second[idx].d:0;
+        for(let k=denoms.length-1;k>=0;k--){
+          const d=denoms[k];
+          let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
+          if(cnt>0){
+            const ex=second.find(x=>x.d===d); if(ex) ex.n+=cnt; else second.push({d,n:cnt});
+            if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
+          }
+          if(leftover<=0) break;
+        }
+        combos.push(second.filter(x=>x.n>0));
+      }
+      // format
+      return combos.map(c=>listToText(c,cur));
+    }
+
+    function populateBills(cur){
+      const map={
+        CAD:[5,10,20,50,100], USD:[5,10,20,50,100], EUR:[5,10,20,50,100,200], GBP:[5,10,20,50], JPY:[1000,2000,5000,10000]
+      };
+      const sel=document.getElementById('billGiven');
+      sel.innerHTML='';
+      (map[cur]||[10,20,50]).forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value=String(v); opt.textContent=(cur==='JPY'? `¥${v}`: `${currencyData[cur].symbol}${v}`);
+        sel.appendChild(opt);
+      });
+    }
+
+    // Money generator supports both sum styles + multiple combos + configurable bill
+    function genMoney(cur, mode){
+      const sumStyle = (document.getElementById('moneySumStyle')?.value) || 'target';
+      const billSel=document.getElementById('billGiven');
+
+      function randomCombo(){
+        const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+        const picks=[]; let total=(cur==='JPY'?0:0.0);
+        const count=randInt(2, Math.min(4, denoms.length));
+        const chosen=[...denoms].sort(()=>Math.random()-0.5).slice(0,count);
+        for(const d of chosen){
+          const n=randInt(1,3);
+          picks.push({d,n});
+          if(cur==='JPY') total += d*n; else total = +(total + d*n).toFixed(2);
+        }
+        const list = listToText(picks,cur);
+        return {list,total};
+      }
+
+      if(mode==='sum'){
+        if(sumStyle==='coins'){
+          const combo=randomCombo();
+          return {q:`Coins/Bills: ${combo.list} → Total = ____`, a:formatMoney(combo.total,cur)};
+        } else {
+          const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+          return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
+        }
+      }
+
+      if(mode==='make'){
+        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+        const combos=combinationsForAmount(amount,cur);
+        return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:`e.g., ${combos.join(' • ')}`};
+      }
+
+      if(mode==='change'){
+        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+        let bill = billSel && billSel.value ? parseFloat(billSel.value) : null;
+        if(!bill){
+          // default highest standard bill >= amount
+          const standards = (cur==='JPY'? [1000,2000,5000,10000] : (cur==='EUR'? [5,10,20,50,100,200] : (cur==='GBP'? [5,10,20,50] : [5,10,20,50,100])));
+          bill = standards.find(x=>x>=amount) || standards[standards.length-1];
+        }
+        const change=(cur==='JPY'? bill-amount : +(bill-amount).toFixed(2));
+        return {q:`Change from ${formatMoney(bill,cur)} for a cost of ${formatMoney(amount,cur)}`, a:`${formatMoney(change,cur)} → ${makeChange(change,cur)}`};
+      }
+
+      return {q:'—',a:''};
+    }
+
+    function genWord(){
+      const lvl=document.getElementById('wpLevel').value; // easy/medium/hard
+      const em=document.getElementById('wpEmoji').value; // many/some/none
+      const town=document.getElementById('wpTown').value.trim()||'your town';
+      const prov=document.getElementById('wpProvince').value.trim()||'your province';
+      const country=document.getElementById('wpCountry').value.trim()||'your country';
+      const emMany = (em==='many'); const emSome=(em==='some');
+      const E = (a,b,c)=> em==='none'? a : (emMany? `${a} ${b} ${c}` : `${a} ${b}`);
+      const nums = lvl==='easy'? [3,5,8,10] : lvl==='hard'? [24,30,45,60] : [8,12,15,20];
+
+      const scenarios=[
+        ()=>{ const n1=randInt(1,nums[2]); const n2=randInt(1,nums[1]); return {q:E('At the market in', '🛒', '🍎')+` ${town}, you buy ${n1} apples and ${n2} oranges. How many pieces of fruit is that?`, a:String(n1+n2)};},
+        ()=>{ const mins=randInt(nums[0],nums[3]); return {q:E('You wait for the bus in', '🚌', '🕒')+` ${prov} for ${mins} minutes. If it arrives at 3:00, what time is it now?`, a:`${mins} min before 3:00`};},
+        ()=>{ const t=randInt(8,30); return {q:E('The pool in', '🏊', '🌡️')+` ${town} is ${t}°C. Yesterday it was ${t-3}°C. What is the change in temperature?`, a:`+3°C`};},
+        ()=>{ const price=randInt(2,10); const qty=randInt(2,6); return {q:E('At a snack stand in', '🌭', '💵')+` ${country}, a hot dog is $${price}. You buy ${qty}. What is the cost before tax?`, a:`$${(price*qty).toFixed(2)}`};}
+      ];
+      const pick=scenarios[randInt(0,scenarios.length-1)];
+      return pick();
     }
 
     // =========== Render ==========
+    function buildAck(){
+      const on=document.getElementById('wpAckToggle').checked;
+      if(!on) return null;
+      const terr=document.getElementById('wpTerritory').value.trim();
+      const lang=document.getElementById('wpLang').value.trim();
+      const phrases=document.getElementById('wpPhrases').value.trim();
+      const box=document.createElement('div'); box.className='ack';
+      let text=`We acknowledge that we learn on the traditional territory${terr? ' of ' + terr : ''}.`;
+      if(lang) text += ` We offer respect in ${lang}.`;
+      if(phrases) text += ` Phrases: ${phrases}`;
+      box.textContent=text;
+      return box;
+    }
+
     function buildPage({pageNum,problems,decor}){
       const page=document.createElement('div');page.className='page';
       page.innerHTML=`<div class="worksheet-header">
@@ -462,9 +651,19 @@
         const aRange=document.getElementById('rangeA').value;
         const bRange=document.getElementById('rangeB').value;
         const decor=pickDecor();
+        const cur=(document.getElementById('currency')||{value:'CAD'}).value;
+
+        // toggle bill selector visibility for change mode
+        const billCol=document.getElementById('billCol');
+        if(document.getElementById('moneyMode').value==='change' && mathType==='money'){
+          billCol.style.display='block'; populateBills(cur);
+        } else { billCol.style.display='none'; }
 
         const ws=document.getElementById('worksheet');
         ws.innerHTML='';
+        if(mathType==='word'){
+          const ack=buildAck(); if(ack) ws.appendChild(ack);
+        }
         const allAnswers=[];
 
         for(let pg=1;pg<=pages;pg++){
@@ -474,13 +673,13 @@
             if(['add','sub','mul','div'].includes(mathType)) item=genArithmetic(mathType,aRange,bRange);
             else if(mathType==='measure') item=genMeasurement();
             else if(mathType==='money'){
-              const cur=(document.getElementById('currency')||{value:'CAD'}).value;
               const mode=(document.getElementById('moneyMode')||{value:'sum'}).value;
               item=genMoney(cur,mode);
             } else if(mathType==='time') item=genTime();
             else if(mathType==='thermo') item=genThermo();
             else if(mathType==='receipts') item=genReceipts();
             else if(mathType==='percent') item=genPercent();
+            else if(mathType==='word') item=genWord();
             else { item={q:'—',a:''}; }
             if(!item||!item.q){ item={q:'(no question generated)', a:''}; }
             problems.push(item); allAnswers.push(item.a);
@@ -502,27 +701,9 @@
         const msg = (err && err.stack) ? err.stack : String(err);
         const box=document.getElementById('status');const t=document.getElementById('statusText');t.textContent=msg;box.style.display='block';
       }
-    } else if(mathType==='time') item=genTime();
-          else if(mathType==='thermo') item=genThermo();
-          else if(mathType==='receipts') item=genReceipts();
-          else if(mathType==='percent') item=genPercent();
-          else { item={q:'—',a:''}; }
-          problems.push(item); allAnswers.push(item.a);
-        }
-        ws.appendChild(buildPage({pageNum:pg,problems,decor}));
-      }
-
-      if(showAnswers){
-        const key=document.createElement('div');key.className='answer-key';
-        key.innerHTML='<h3>Answer Key</h3>';
-        const ol=document.createElement('ol');
-        allAnswers.forEach(a=>{const li=document.createElement('li');li.textContent=(a!==undefined&&a!==null)?String(a):'';ol.appendChild(li)});
-        key.appendChild(ol);ws.appendChild(key);
-      }
     }
 
     // =========== UI wiring ==========
-    // Category pills
     document.querySelectorAll('.pill').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const type=btn.getAttribute('data-type');
@@ -539,15 +720,20 @@
       document.getElementById('thermoRow').style.display = (val==='thermo') ? 'flex' : 'none';
       document.getElementById('receiptsRow').style.display = (val==='receipts') ? 'flex' : 'none';
       document.getElementById('percentRow').style.display = (val==='percent') ? 'flex' : 'none';
+      document.getElementById('wordRow').style.display = (val==='word') ? 'flex' : 'none';
       document.getElementById('numRanges').style.display = (['add','sub','mul','div'].includes(val))? 'block' : 'none';
       document.getElementById('mathHeading').textContent = `Worksheet Options — ${val}`;
+      const billCol=document.getElementById('billCol');
+      billCol.style.display = (val==='money' && document.getElementById('moneyMode').value==='change')? 'block' : 'none';
     }
 
     document.getElementById('mathType').addEventListener('change',refreshOptionVisibility);
+    document.getElementById('moneyMode').addEventListener('change',refreshOptionVisibility);
+    document.getElementById('currency').addEventListener('change',()=>populateBills(document.getElementById('currency').value));
     document.getElementById('btnGenerate').addEventListener('click',generate);
     document.getElementById('btnPrint').addEventListener('click',()=>window.print());
 
-    // Self‑test (existing tests preserved) + new money test
+    // Self‑test
     document.getElementById('btnSelfTest').addEventListener('click',()=>{
       console.clear();
       console.log('— Self‑Test start —');
@@ -559,25 +745,38 @@
       console.assert(typeof genThermo().a==='string','thermo answer');
       console.assert(typeof genReceipts().a==='string','receipts answer');
       console.assert(typeof genPercent().a==='string','percent answer');
-      console.assert(typeof genMoney('CAD','sum').a==='string','money answer');
-      console.assert(formatMoney(3.5,'CAD')==='$3.50','CAD format');
-      console.assert(formatMoney(3500,'JPY').startsWith('¥'),'JPY format');
-      console.assert(makeChange(4.75,'USD').length>0,'change maker');
+      // money tests
+      document.getElementById('moneySumStyle').value='target';
+      console.assert(typeof genMoney('CAD','sum').a==='string','money sum target');
+      document.getElementById('moneySumStyle').value='coins';
+      const mcoins=genMoney('CAD','sum');
+      console.assert(mcoins.q.includes('Coins/Bills:'),'money sum coins variant');
+      const mk=genMoney('CAD','make');
+      console.assert(mk.a.includes('e.g.'),'make shows combos');
+      document.getElementById('moneyMode').value='change';
+      populateBills('CAD');
+      const ch=genMoney('CAD','change');
+      console.assert(ch.q.startsWith('Change from') && ch.a.includes('→'),'change with breakdown');
+      document.getElementById('moneyMode').value='sum';
+      // word problems
+      document.getElementById('mathType').value='word';
+      const w=genWord();
+      console.assert(typeof w.q==='string' && w.q.length>10,'word problem generated');
       console.log('— Self‑Test complete —');
       alert('Self‑Test complete. Open console for details.');
+      refreshOptionVisibility();
     });
 
     // Initialize
+    populateBills(document.getElementById('currency').value);
     refreshOptionVisibility();
 
     // Global error trap so silent errors show up in the Status box
     window.addEventListener('error', (e)=>{
       const box=document.getElementById('status');const t=document.getElementById('statusText');
-      t.textContent = `Runtime error: ${e.message}
-` + (e.error && e.error.stack ? e.error.stack : '');
+      t.textContent = `Runtime error: ${e.message}\n` + (e.error && e.error.stack ? e.error.stack : '');
       box.style.display='block';
     });
   </script>
 </body>
 </html>
-
