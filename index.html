@@ -178,21 +178,49 @@
     </div>
 
     <!-- WORD PROBLEM OPTIONS -->
-    <div class="row" id="wordRow" style="margin-top:.5rem;display:none;">
-      <div class="col">
-        <label for="wpLevel">Reading level</label>
-        <select id="wpLevel">
-          <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <label for="wpEmoji">Emoji support</label>
-        <select id="wpEmoji">
-          <option value="many">Many 😊</option>
-          <option value="some" selected>Some 🙂</option>
-          <option value="none">None</option>
-        </select>
-      </div>
+    <!-- WORD PROBLEM OPTIONS -->
+<div class="row" id="wordRow" style="margin-top:.5rem;display:none;">
+  <div class="col">
+    <label for="wpLevel">Reading level</label>
+    <select id="wpLevel">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <label for="wpEmoji">Emoji support</label>
+    <select id="wpEmoji">
+      <option value="many">Many 😊</option>
+      <option value="some" selected>Some 🙂</option>
+      <option value="none">None</option>
+    </select>
+
+    <label><input type="checkbox" id="wpLocalLangToggle"/> Render worksheet in local language (beta)</label>
+    <span class="muted">Uses a placeholder translator. We’ll swap in FirstVoices later.</span>
+  </div>
+
+  <div class="col">
+    <label for="wpTown">Town / City</label>
+    <input id="wpTown" type="text" placeholder="e.g., Port Hardy" />
+    <label for="wpProvince">Province / State</label>
+    <input id="wpProvince" type="text" value="BC" />
+    <label for="wpCountry">Country</label>
+    <input id="wpCountry" type="text" value="Canada" />
+  </div>
+
+  <div class="col">
+    <label for="wpNationSelect">Nation / Territory (BC)</label>
+    <select id="wpNationSelect"></select>
+
+    <label for="wpLang">Local language (auto)</label>
+    <input id="wpLang" type="text" placeholder="auto" />
+
+    <label for="wpPhrases">Phrases (auto; editable)</label>
+    <textarea id="wpPhrases" placeholder="Hello / Thank you, etc."></textarea>
+
+    <label><input type="checkbox" id="wpAckToggle" checked/> Include territorial acknowledgement</label>
+  </div>
+</div>
       <div class="col">
         <label for="wpTown">Town / City</label>
         <input id="wpTown" type="text" placeholder="e.g., Port Hardy" />
