@@ -582,14 +582,6 @@ async function translateTextLocalLanguage(text, langCodeOrName){
   };
 }
 
-    } ${name} — ${formatMoney(price,cur)}`);
-        total += price;
-      }
-      const taxAmt = (cur==='JPY'? Math.round(total*tax/100) : +(total*tax/100).toFixed(2));
-      const grand = (cur==='JPY'? Math.round(total+taxAmt) : +(total+taxAmt).toFixed(2));
-      return {q:`🧾 Receipt: ${lines.join('; ')}; Tax ${tax}% → Total = ____`, a:formatMoney(grand,cur)};
-    }
-
     function genPercent(){
       const cur=document.getElementById('currency').value || 'CAD';
       const kind=document.getElementById('percentKind').value; // discount/tip/tax/change
