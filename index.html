@@ -393,6 +393,54 @@
       Apples:"🍎", Milk:"🥛", Bread:"🍞", Pasta:"🍝", Soup:"🍲", Bananas:"🍌", Notebook:"📓", Markers:"🖊️", Yogurt:"🥣", Juice:"🧃"
     };
 
+    // --- Starter BC Nations dataset (you can expand safely) ---
+const bcNations = [
+  { nation: "Kwakwaka’wakw", lang: "Kwak̓wala", phrases: { hello: "Gilakas’la", thanks: "Gilakas’la" } },
+  { nation: "Nuu-chah-nulth", lang: "Nuučaan̓uɫ (Nuu-chah-nulth)", phrases: { hello: "Čuu", thanks: "čaaʔaa (thank you)" } },
+  { nation: "Coast Salish (Lekwungen)", lang: "Lək̓ʷəŋin̓əŋ (Lekwungen)", phrases: { hello: "Háw’aa (hello)", thanks: "HÍSW̱ḴE (thank you)" } },
+  { nation: "Coast Salish (Hul’q’umi’num’)", lang: "Hul’q’umi’num’", phrases: { hello: "’Uy’ skweyul", thanks: "Huy ch q’u" } },
+  { nation: "Tla’amin Nation", lang: "ƛaʔamɩn (Ayajuthem)", phrases: { hello: "čɛčɛhaθɛč", thanks: "čɛčɛ’snɛ" } },
+  { nation: "Squamish Nation (Sḵwx̱wú7mesh Úxwumixw)", lang: "Sḵwx̱wú7mesh sníchim", phrases: { hello: "Chen kw’enmantumiyap", thanks: "Huy chexw" } },
+  { nation: "Tsilhqot’in Nation", lang: "Tŝilhqot’in", phrases: { hello: "Diniyah", thanks: "Gúntsi" } },
+  // Add more here as needed
+];
+
+// Populate Nation dropdown and auto-fill language/phrases
+function initNationDropdown(){
+  const sel = document.getElementById('wpNationSelect');
+  if(!sel) return;
+  sel.innerHTML = '<option value="">— Choose a Nation —</option>';
+  bcNations.forEach((n,i)=>{
+    const opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = n.nation;
+    sel.appendChild(opt);
+  });
+}
+
+function onNationChange(){
+  const sel = document.getElementById('wpNationSelect');
+  const idx = sel && sel.value !== "" ? parseInt(sel.value,10) : -1;
+  const langEl = document.getElementById('wpLang');
+  const phrEl  = document.getElementById('wpPhrases');
+  if(idx >= 0 && bcNations[idx]){
+    const n = bcNations[idx];
+    langEl.value = n.lang || "";
+    const hello = n.phrases?.hello ? `Hello: ${n.phrases.hello}` : "";
+    const thanks= n.phrases?.thanks ? `; Thank you: ${n.phrases.thanks}` : "";
+    phrEl.value = `${hello}${thanks}`.replace(/^;\s*/, '');
+  } else {
+    langEl.value = "";
+    phrEl.value = "";
+  }
+}
+
+// Placeholder: FirstVoices integration hook
+async function translateTextLocalLanguage(text, langCodeOrName){
+  // TODO: integrate FirstVoices — for now, return original
+  return text;
+}
+
     // Canadian tax presets by province/territory
     const caTaxByProvince = {
       AB: { pst: 0, gst: 5 },
