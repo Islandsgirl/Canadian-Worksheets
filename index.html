@@ -2,489 +2,582 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> Language Arts – Canadian Worksheets</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Canadian Worksheets</title>
   <style>
     :root{
-      --bg:#f8f9fa;
-      --card:#ffffff;
-      --text:#2c3e50;
-      --muted:#666;
-      --border:#ccc;
-      --accent:#2d7ff9;
-      --ok:#27ae60;
+      --bg:#f8f9fa;--card:#fff;--text:#2c3e50;--muted:#666;--border:#ccd2d9;--accent:#2d7ff9;--ok:#27ae60;--warn:#ff8c00
     }
-    body{
-      font-family: Arial, sans-serif;
-      margin:2rem;
-      background:var(--bg);
-      color:var(--text);
-    }
-    h1{margin:0 0 1rem;color:var(--text)}
-    .controls, .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      padding:1rem;
-      margin:0 0 1.25rem;
-    }
-    label{display:block;margin:.5rem 0 .25rem}
-    select, input[type="text"]{
-      width:100%;max-width:420px;padding:.5rem;border:1px solid var(--border);
-    }
-    .row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
-    .row > div{min-width:200px}
-    button{
-      padding:.6rem .9rem;border:0;background:var(--accent);color:#fff;cursor:pointer;border-radius:4px
-    }
-    button.secondary{background:#6c757d}
-    button.success{background:var(--ok)}
-    .meta{color:var(--muted);font-size:.95rem;margin:.5rem 0 1rem}
-    .article h2{margin:.2rem 0 .2rem}
-    .article p{line-height:1.6}
-    .section-title{margin-top:1rem;border-top:2px solid var(--border);padding-top:.8rem}
-    .qs h3{margin:.8rem 0 .4rem}
-    .qs ol{margin:.3rem 0 1rem}
-    .qs li{margin:.35rem 0}
-    .key{
-      display:none;margin-top:1rem;border-top:2px dashed var(--border);padding-top:.8rem;background:#f4f8ff
-    }
-    .inline-controls{display:flex;gap: .75rem;flex-wrap:wrap;margin:.75rem 0}
-    .badge{display:inline-block;background:#eef;border:1px solid #99a;padding:.15rem .4rem;border-radius:.25rem;font-size:.85rem}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    @media (max-width:800px){.grid-2{grid-template-columns:1fr}}
-    .small{font-size:.9rem;color:var(--muted)}
-    .hr{height:1px;background:var(--border);margin:1rem 0}
-    .footnote{font-size:.85rem;color:var(--muted)}
-    .visually-hidden{position:absolute;left:-9999px}
+    *{box-sizing:border-box}
+    body {font-family: Arial, sans-serif;margin: 2rem;background-color: var(--bg);color:var(--text)}
+    h1 {color: var(--text);margin:0 0 1rem}
+    h2 {margin-top: 2rem}
+    label, select, input, button {display: block;margin-top: .6rem;font-size: 1rem}
+    .section {padding: 1.25rem;background: var(--card);border: 1px solid var(--border);margin-bottom: 2rem;border-radius:8px}
+    .row{display:flex;flex-wrap:wrap;gap:1rem}
+    .col{min-width:220px;flex:1}
+    .controls-inline {display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-top:.6rem}
+    .btn{background:var(--accent);color:#fff;border:0;padding:.6rem .9rem;border-radius:6px;cursor:pointer}
+    .btn.secondary{background:#6c757d}
+    .btn.success{background:var(--ok)}
+    .btn.ghost{background:#e9eef9;color:#1b3b88}
+    .muted{color:var(--muted);font-size:.9rem}
+
+    /* Category cards */
+    .grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+    .card{background:#fff;border:1px solid var(--border);padding:1rem;border-radius:8px}
+    .card h3{margin:.2rem 0 .4rem}
+    .pill{display:inline-block;background:#eef;border:1px solid #99a;padding:.1rem .45rem;border-radius:999px;font-size:.85rem;margin:.1rem .25rem 0 0}
+
+    /* Worksheet rendering */
+    .worksheet-preview {margin-top: 2rem}
+    .page{page-break-after:always;border:1px solid var(--border);background:#fff;margin:0 0 1.25rem;padding:1rem;border-radius:8px}
+    .page:last-child{page-break-after:auto}
+    .worksheet-header {display:flex;justify-content:space-between;margin-bottom: .75rem;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+    .worksheet-grid {display: grid;grid-template-columns: repeat(3, 1fr);gap: .9rem;font-size: 1.12rem}
+    .problem{min-height:2.4rem;border-bottom:1px dashed #ddd;padding:.2rem .25rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+    .decor{opacity:.95;font-size:1.1rem}
+    .thumb{height:24px;width:24px;object-fit:cover;border-radius:4px;border:1px solid #ddd}
+    .answer-key{margin-top:1rem;border-top:2px solid #999;padding-top:.75rem}
+
+    footer {margin-top: 3rem;font-size: 0.9rem;color: var(--muted)}
   </style>
 </head>
 <body>
+  <h1>🌐 Canadian Worksheet Generator</h1>
 
-  <h1>📚 Language Arts </h1>
+  <!-- LANGUAGE ARTS (link out to reading.html) -->
+  <div class="section">
+    <h2>📚 Language Arts</h2>
+    <p class="muted">Short, student-friendly news with multi‑level activities.</p>
+    <div class="controls-inline">
+      <a class="btn secondary" href="reading.html">Open Reading Comprehension</a>
+    </div>
+  </div>
 
-  <div class="controls card">
+  <!-- MATH LANDING: user‑friendly categories -->
+  <div class="section">
+    <h2>➗ Math: Choose a Section</h2>
+    <div class="grid-cards">
+      <div class="card">
+        <h3>Basic Operations</h3>
+        <div>
+          <button class="pill" data-type="add">Addition</button>
+          <button class="pill" data-type="sub">Subtraction</button>
+          <button class="pill" data-type="mul">Multiplication</button>
+          <button class="pill" data-type="div">Division</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Measurement</h3>
+        <div>
+          <button class="pill" data-type="measure">Metric Conversions</button>
+          <button class="pill" data-type="time">Telling Time</button>
+          <button class="pill" data-type="thermo">Thermometers</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Money & Life Skills</h3>
+        <div>
+          <button class="pill" data-type="money">Money / Currency</button>
+          <button class="pill" data-type="receipts">Add Receipts</button>
+          <button class="pill" data-type="percent">Percent & Discounts</button>
+        </div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:.6rem">Tip: Pick a section above to auto‑select options below. Images are rights‑safe by default; use your own image URLs only if you have permission.</p>
+  </div>
+
+  <!-- MATH OPTIONS -->
+  <div class="section" id="mathSection">
+    <h2 id="mathHeading">Worksheet Options</h2>
     <div class="row">
-      <div>
-        <label for="level">Reading level</label>
-        <select id="level">
-          <option value="easy">Easy (A1–A2)</option>
-          <option value="medium" selected>Medium (B1–B2)</option>
-          <option value="hard">Hard (C1+)</option>
+      <div class="col">
+        <label for="mathType">Math type</label>
+        <select id="mathType">
+          <option value="add">Addition</option>
+          <option value="sub">Subtraction</option>
+          <option value="mul">Multiplication</option>
+          <option value="div">Division</option>
+          <option value="money">Money / Currency</option>
+          <option value="measure">Measurement (metric)</option>
+          <option value="time">Telling Time</option>
+          <option value="thermo">Thermometer Reading</option>
+          <option value="receipts">Add Receipts</option>
+          <option value="percent">Percent Problems</option>
         </select>
       </div>
-      <div>
-        <label for="region">Region (optional)</label>
-        <input id="region" type="text" placeholder="e.g., Vancouver Island, BC" />
-        <div class="small">Used to pick more local-flavoured articles when available.</div>
+      <div class="col" id="numRanges">
+        <label for="rangeA">Number range A (min–max)</label>
+        <input id="rangeA" type="text" value="0-20" placeholder="e.g., 0-20" />
+        <span class="muted">Used by +, −, ×, ÷</span>
+        <label for="rangeB">Number range B (min–max)</label>
+        <input id="rangeB" type="text" value="0-20" placeholder="e.g., 0-20" />
       </div>
-      <div>
-        <label for="articleSel">Article</label>
-        <select id="articleSel"></select>
+      <div class="col">
+        <label for="pages">Pages</label>
+        <input id="pages" type="number" min="1" max="20" value="1" />
+      </div>
+      <div class="col">
+        <label for="perPage">Problems per page</label>
+        <input id="perPage" type="number" min="6" max="60" value="24" />
       </div>
     </div>
-    <div class="inline-controls">
-      <button id="btnLoad">Load Article</button>
-      <button id="btnRandom" class="secondary">Random Article</button>
-      <button id="btnPrint" class="success">Print / Save as PDF</button>
-      <label class="badge"><input id="toggleKey" type="checkbox" /> Show Answer Key</label>
+
+    <!-- MONEY OPTIONS -->
+    <div class="row" id="moneyRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="currency">Currency</label>
+        <select id="currency">
+          <option value="CAD">CAD – $ (Canadian)</option>
+          <option value="USD">USD – $ (United States)</option>
+          <option value="EUR">EUR – € (Euro)</option>
+          <option value="GBP">GBP – £ (Pound)</option>
+          <option value="JPY">JPY – ¥ (Yen)</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="moneyMode">Money problem type</label>
+        <select id="moneyMode">
+          <option value="sum">Count the total value</option>
+          <option value="make">Make this amount</option>
+          <option value="change">Change from amount</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- TIME OPTIONS -->
+    <div class="row" id="timeRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="timeFormat">Time format</label>
+        <select id="timeFormat">
+          <option value="digital">Digital (HH:MM)</option>
+          <option value="analog">Analog (describe clock)</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="timeStep">Minute steps</label>
+        <select id="timeStep">
+          <option value="5">5 minutes</option>
+          <option value="1">1 minute</option>
+          <option value="15">15 minutes</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="timeSystem">Clock</label>
+        <select id="timeSystem">
+          <option value="12">12‑hour</option>
+          <option value="24">24‑hour</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- THERMOMETER OPTIONS -->
+    <div class="row" id="thermoRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="tempScale">Temperature scale</label>
+        <select id="tempScale">
+          <option value="C">Celsius (°C)</option>
+          <option value="F">Fahrenheit (°F)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- RECEIPTS OPTIONS -->
+    <div class="row" id="receiptsRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="itemsCount">Items per receipt</label>
+        <input id="itemsCount" type="number" min="2" max="8" value="4" />
+      </div>
+      <div class="col">
+        <label for="taxPct">Sales tax %</label>
+        <input id="taxPct" type="number" min="0" max="25" value="5" />
+        <span class="muted">Set to 0 for no tax</span>
+      </div>
+    </div>
+
+    <!-- PERCENT OPTIONS -->
+    <div class="row" id="percentRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="percentKind">Percent scenario</label>
+        <select id="percentKind">
+          <option value="discount">Store discount</option>
+          <option value="tip">Restaurant tip</option>
+          <option value="tax">Sales tax</option>
+          <option value="change">Increase / Decrease</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DECOR OPTIONS -->
+    <div class="row" style="margin-top:.5rem;">
+      <div class="col">
+        <label for="emojiTheme">Emoji theme (decorations)</label>
+        <select id="emojiTheme">
+          <option value="none">None</option>
+          <option value="animals">Animals 🐾</option>
+          <option value="space">Space 🚀</option>
+          <option value="sports">Sports 🏈</option>
+          <option value="food">Food 🍎</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="imageTheme">Image theme (safe)</label>
+        <select id="imageTheme">
+          <option value="none">None</option>
+          <option value="public_domain">Public‑domain icons</option>
+        </select>
+        <span class="muted">Avoid copyrighted characters. Use your own images only if you have rights.</span>
+      </div>
+      <div class="col">
+        <label for="customImg">Custom image URL (optional)</label>
+        <input id="customImg" type="text" placeholder="https://… (must have usage rights)" />
+      </div>
+    </div>
+
+    <div class="controls-inline">
+      <label><input type="checkbox" id="showAnswers"/> Show Answer Key</label>
+      <button class="btn" id="btnGenerate">Generate Worksheet</button>
+      <button class="btn success" id="btnPrint">Print / Save PDF</button>
+      <button class="btn secondary" id="btnSelfTest" title="Run quick checks">Run Self‑Test</button>
     </div>
   </div>
 
-  <div class="card article" id="articleCard">
-    <div class="meta" id="metaLine">Level: — • Region: —</div>
-    <h2 id="title">Choose a level and article to begin</h2>
-    <p id="lead" class="small">Short, student-friendly news passages with simplified language and emojis. Perfect for neurodivergent learners.</p>
-    <div id="text"></div>
+  <div class="worksheet-preview" id="worksheet"></div>
+
+  <div id="status" class="section" style="display:none; border-color:#f3c7c7; background:#fff7f7">
+    <strong>Status:</strong>
+    <pre id="statusText" style="white-space:pre-wrap;margin:.5rem 0 0"></pre>
   </div>
 
-  <div class="card qs" id="qsCard" aria-live="polite">
-    <div class="section-title"><strong>Activities</strong></div>
-
-    <div class="grid-2">
-      <div>
-        <h3>1) True / False</h3>
-        <ol id="tfList"></ol>
-      </div>
-      <div>
-        <h3>2) Multiple Choice</h3>
-        <ol id="mcqList"></ol>
-      </div>
-    </div>
-
-    <h3>3) Short Answer</h3>
-    <ol id="saList"></ol>
-
-    <h3>4) Vocabulary</h3>
-    <ol id="vocabList"></ol>
-
-    <h3>5) Discussion</h3>
-    <ol id="discussList"></ol>
-
-    <div class="key" id="answerKey">
-      <h3>✅ Answer Key</h3>
-      <div id="keyContent"></div>
-    </div>
-    <div class="hr"></div>
-    <div class="footnote">Tip: Use the Print button to export as a PDF for students. Toggle the Answer Key off before printing student copies. 😉</div>
-  </div>
+  <footer>
+    <h2>Privacy Policy</h2>
+    <p>This website may use cookies for basic functionality. We do not collect personally identifiable information unless you choose to provide it. We will never sell your data to third parties.</p>
+    <p class="muted">Image use note: Do not upload or embed copyrighted character images unless you own or have permission to use them.</p>
+  </footer>
 
   <script>
-    // ----- Sample data (replace with backend/API later) -----
-    // Each article includes: title, text (paragraphs), tf, mcq, sa, vocab, discuss, answers
-    const ARTICLES = {
-      easy: [
-        {
-          id: "beaver-park",
-          region: ["BC","Vancouver Island","Canada","park"],
-          title: "🦫 Beaver Builds a Small Dam in a City Park",
-          text: [
-            "A beaver built a small dam in a city park. 🌲",
-            "The dam made a tiny pond. Ducks and fish live there now. 🦆🐟",
-            "People visit and take photos. They keep a safe distance. 📸"
-          ],
-          tf: [
-            { q: "A beaver built a dam in the park.", a: "T" },
-            { q: "There are no animals near the pond.", a: "F" },
-            { q: "People take photos from a safe distance.", a: "T" }
-          ],
-          mcq: [
-            { q: "What animal built the dam?", options:["Duck","Beaver","Dog"], a: 1 },
-            { q: "What did the dam make?", options:["A road","A pond","A bridge"], a: 1 }
-          ],
-          sa: [
-            "Where did the beaver build the dam?",
-            "Name one animal that lives near the pond."
-          ],
-          vocab: [
-            { word:"dam", hint:"a wall that holds water" },
-            { word:"pond", hint:"a small body of water" }
-          ],
-          discuss: [
-            "Would you like a pond in your local park? Why or why not?",
-            "How should people act around wild animals?"
-          ],
-          key: {
-            sa: [
-              "In a city park.",
-              "Possible answers: duck, fish (accept reasonable answers)."
-            ]
-          }
-        },
-        {
-          id: "bus-lights",
-          region: ["Canada","schools","safety"],
-          title: "🚌 New Safety Lights for School Buses",
-          text: [
-            "School buses got new, brighter safety lights. 💡",
-            "Drivers can see the bus sooner and stop in time.",
-            "Students feel safer when getting on and off the bus."
-          ],
-          tf: [
-            { q: "School buses got brighter lights.", a: "T" },
-            { q: "Drivers can see the bus later.", a: "F" },
-            { q: "Students feel safer.", a: "T" }
-          ],
-          mcq: [
-            { q: "Who stops in time?", options:["Drivers","Teachers","Parents"], a: 0 }
-          ],
-          sa: [
-            "Why are brighter lights useful?",
-            "When do students feel safer?"
-          ],
-          vocab: [
-            { word:"brighter", hint:"gives more light" },
-            { word:"safer", hint:"more protected" }
-          ],
-          discuss: [
-            "What other ideas could make buses safer?",
-            "How do you get to school?"
-          ],
-          key: {
-            sa: [
-              "Drivers can see the bus sooner.",
-              "When getting on and off the bus."
-            ]
-          }
-        }
-      ],
-      medium: [
-        {
-          id: "beach-clean",
-          region: ["BC","Vancouver Island","Nanaimo","Tofino","Ucluelet","Canada","coast","beach"],
-          title: "🌿 Students Lead Beach Cleanup on Vancouver Island",
-          text: [
-            "A group of local students organized a weekend beach cleanup on Vancouver Island.",
-            "They collected over 100 bags of trash, including plastic bottles and fishing line.",
-            "The students said the goal was to protect wildlife and keep beaches safe for visitors."
-          ],
-          tf: [
-            { q:"The cleanup collected over 100 bags of trash.", a:"T" },
-            { q:"The students wanted to harm wildlife.", a:"F" },
-            { q:"Fishing line and plastic were among the trash.", a:"T" }
-          ],
-          mcq: [
-            { q:"Where did the cleanup happen?", options:["Inland forest","Downtown mall","Vancouver Island beach"], a:2 },
-            { q:"What was a main goal?", options:["Make art","Protect wildlife","Sell plastic"], a:1 }
-          ],
-          sa: [
-            "Name two types of trash they collected.",
-            "Why is a beach cleanup important for local communities?"
-          ],
-          vocab: [
-            { word:"organized", hint:"planned and led" },
-            { word:"wildlife", hint:"animals living in nature" },
-            { word:"visitors", hint:"people who come to a place" }
-          ],
-          discuss: [
-            "Have you participated in a cleanup? What did you learn?",
-            "What everyday habits reduce plastic waste?"
-          ],
-          key: {
-            sa: [
-              "Plastic bottles, fishing line (accept other reasonable items).",
-              "It protects animals and keeps beaches safe and welcoming."
-            ]
-          }
-        },
-        {
-          id: "math-scores",
-          region: ["Canada","schools","education"],
-          title: "📊 Canadian Math Scores Show Improvement",
-          text: [
-            "Recent reports show an improvement in Canadian students’ math scores.",
-            "Teachers say interactive tools and targeted practice helped.",
-            "Schools plan to share successful strategies across districts."
-          ],
-          tf: [
-            { q:"Math scores declined this year.", a:"F" },
-            { q:"Teachers used interactive tools.", a:"T" },
-            { q:"Schools will keep strategies secret.", a:"F" }
-          ],
-          mcq: [
-            { q:"What improved according to reports?", options:["Science scores","Math scores","Art scores"], a:1 },
-            { q:"What helped students?", options:["Interactive tools","Less practice","No homework"], a:0 }
-          ],
-          sa: [
-            "What kind of tools are mentioned?",
-            "Why share strategies across districts?"
-          ],
-          vocab: [
-            { word:"interactive", hint:"students can use it, not just watch" },
-            { word:"strategy", hint:"a plan to reach a goal" }
-          ],
-          discuss: [
-            "Which math tools help you learn best?",
-            "How can schools collaborate more effectively?"
-          ],
-          key: {
-            sa: [
-              "Interactive tools (e.g., apps, whiteboards).",
-              "So more students benefit from what works."
-            ]
-          }
-        }
-      ],
-      hard: [
-        {
-          id:"whale-study",
-          region:["BC","Victoria","Vancouver Island","Pacific","Canada","marine"],
-          title:"🔍 Researchers Track Whale Behaviour off the BC Coast",
-          text:[
-            "Marine researchers deployed acoustic recorders to study whale communication patterns off the coast of British Columbia.",
-            "Preliminary data suggests seasonal differences in calls, possibly linked to migration and feeding grounds.",
-            "The team hopes the findings will inform shipping guidelines to reduce noise and protect whale habitats."
-          ],
-          tf:[
-            { q:"Researchers used acoustic tools to collect data.", a:"T" },
-            { q:"The study found no seasonal differences.", a:"F" },
-            { q:"Findings may guide quieter shipping practices.", a:"T" }
-          ],
-          mcq:[
-            { q:"What did researchers deploy?", options:["Satellites","Acoustic recorders","Fishing nets"], a:1 },
-            { q:"Why are the findings important?", options:["To sell more boats","To inform shipping rules","To ban tourism"], a:1 }
-          ],
-          sa:[
-            "What two factors might explain seasonal differences in calls?",
-            "How could the research help whale habitats?"
-          ],
-          vocab:[
-            { word:"acoustic", hint:"related to sound" },
-            { word:"habitat", hint:"a place where an animal lives" }
-          ],
-          discuss:[
-            "How should governments balance shipping and wildlife protection?",
-            "What technologies can reduce ocean noise?"
-          ],
-          key:{
-            sa:[
-              "Migration and feeding grounds.",
-              "By informing quieter, safer shipping guidelines."
-            ]
-          }
-        },
-        {
-          id:"green-policy",
-          region:["Canada","BC","policy","energy"],
-          title:"💡 Province Announces New Green Energy Policy",
-          text:[
-            "A provincial government introduced incentives for community-scale solar and wind projects.",
-            "Analysts predict faster adoption in rural areas with strong local support.",
-            "Critics call for clear recycling plans for old panels and turbines."
-          ],
-          tf:[
-            { q:"The policy encourages solar and wind projects.", a:"T" },
-            { q:"Adoption is expected to slow down.", a:"F" },
-            { q:"No one mentioned recycling issues.", a:"F" }
-          ],
-          mcq:[
-            { q:"Which projects are incentivized?", options:["Coal","Diesel","Solar and wind"], a:2 }
-          ],
-          sa:[
-            "Where might adoption speed up and why?",
-            "What concern do critics raise?"
-          ],
-          vocab:[
-            { word:"incentive", hint:"a reward that motivates action" },
-            { word:"adoption", hint:"how quickly people start using something" }
-          ],
-          discuss:[
-            "What trade-offs come with renewables?",
-            "How can recycling be built into new policies?"
-          ],
-          key:{
-            sa:[
-              "Rural areas with strong support.",
-              "Recycling plans for panels/turbines."
-            ]
-          }
-        }
-      ]
+    // =========== Helpers ==========
+    const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+    const parseRange=(s,def=[0,20])=>{const m=(s||"").trim().match(/^(\-?\d+)\s*[-–]\s*(\-?\d+)$/);if(!m)return def.map(Number);const a=parseInt(m[1],10),b=parseInt(m[2],10);return a<=b?[a,b]:[b,a]};
+
+    const emojiPacks={
+      none:[],
+      animals:["🦊","🐻","🐱","🐶","🦉","🐰"],
+      space:["🚀","🛰️","🪐","🌌","🛸","🌟"],
+      sports:["⚽","🏀","🏈","🎾","🏒","🥋"],
+      food:["🍎","🍔","🍕","🍣","🍪","🍉"]
     };
 
-    // Populate article dropdown based on level & optional region match
-    function populateArticles(){
-      const level = document.getElementById('level').value;
-      const region = (document.getElementById('region').value || "").toLowerCase();
-      const sel = document.getElementById('articleSel');
-      sel.innerHTML = "";
+    const pdThumbs=[
+      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Transparent_pixel.png"
+    ];
 
-      const items = ARTICLES[level] || [];
-      // simple region boost: put region-matching articles first
-      const ranked = [...items].sort((a,b)=>{
-        const ra = a.region?.some(r => region && r.toLowerCase().includes(region)) ? 1 : 0;
-        const rb = b.region?.some(r => region && r.toLowerCase().includes(region)) ? 1 : 0;
-        return rb - ra;
-      });
+    const currencyData={
+      CAD:{symbol:"$", code:"CAD", denominations:[100,25,10,5,1,0.25,0.10,0.05]},
+      USD:{symbol:"$", code:"USD", denominations:[100,50,20,10,5,1,0.25,0.10,0.05]},
+      EUR:{symbol:"€", code:"EUR", denominations:[100,50,20,10,5,2,1,0.5,0.2,0.1]},
+      GBP:{symbol:"£", code:"GBP", denominations:[50,20,10,5,2,1,0.5,0.2,0.1]},
+      JPY:{symbol:"¥", code:"JPY", denominations:[10000,5000,2000,1000,500,100,50,10,5,1]}
+    };
 
-      ranked.forEach(a=>{
-        const opt = document.createElement('option');
-        opt.value = a.id;
-        opt.textContent = a.title;
-        sel.appendChild(opt);
-      });
+    function formatMoney(val, cur){
+      if(cur==="JPY") return `¥${Math.round(val)}`;
+      return `${currencyData[cur].symbol}${val.toFixed(2)}`;
+    }
 
-      if (!ranked.length){
-        const opt = document.createElement('option');
-        opt.value = "";
-        opt.textContent = "No articles found for this level.";
-        sel.appendChild(opt);
+    function makeChange(amount, cur){
+      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+      let remaining=amount;const out=[];
+      for(const d of denoms){
+        let cnt=0;
+        if(cur==="JPY"){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
+        else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
+        if(cnt>0) out.push(`${cnt}×${(cur==="JPY"? d: formatMoney(d,cur).replace(/^[$€£]/,''))}`);
+      }
+      return out.join(", ");
+    }
+
+    function pickDecor(){
+      const emTheme=document.getElementById('emojiTheme').value;
+      const arr=emojiPacks[emTheme]||[];const em=arr.length?arr[randInt(0,arr.length-1)]:"";
+      const imgTheme=document.getElementById('imageTheme').value;
+      const custom=document.getElementById('customImg').value.trim();
+      let imgSrc="";
+      if(custom) imgSrc=custom; else if(imgTheme==='public_domain') imgSrc=pdThumbs[0];
+      return {em,imgSrc};
+    }
+
+    // =========== Problem generators ==========
+    function genArithmetic(op,aRange,bRange){
+      const [aMin,aMax]=parseRange(aRange);const [bMin,bMax]=parseRange(bRange);
+      const a=randInt(aMin,aMax), b=randInt(bMin,bMax);
+      switch(op){
+        case 'add': return {q:`${a} + ${b} = ____`, a:(a+b)};
+        case 'sub': return {q:`${a} − ${b} = ____`, a:(a-b)};
+        case 'mul': return {q:`${a} × ${b} = ____`, a:(a*b)};
+        case 'div': {
+          const x=randInt(aMin,aMax), y=randInt(Math.max(1,bMin),Math.max(1,bMax));
+          return {q:`${x*y} ÷ ${y} = ____`, a:x};
+        }
       }
     }
 
-    // Pick current article object
-    function getCurrentArticle(){
-      const level = document.getElementById('level').value;
-      const id = document.getElementById('articleSel').value;
-      const list = ARTICLES[level] || [];
-      return list.find(a => a.id === id) || null;
+    function genMeasurement(){
+      const types=["cm→m","m→cm","g→kg","kg→g","mL→L","L→mL"];
+      const t=types[randInt(0,types.length-1)];
+      switch(t){
+        case "cm→m":{const v=randInt(10,5000);return {q:`Convert ${v} cm to m`, a:(v/100).toFixed(2)+" m"}};
+        case "m→cm":{const v=randInt(1,500);return {q:`Convert ${v} m to cm`, a:(v*100)+" cm"}};
+        case "g→kg":{const v=randInt(100,50000);return {q:`Convert ${v} g to kg`, a:(v/1000).toFixed(2)+" kg"}};
+        case "kg→g":{const v=randInt(1,200);return {q:`Convert ${v} kg to g`, a:(v*1000)+" g"}};
+        case "mL→L":{const v=randInt(100,5000);return {q:`Convert ${v} mL to L`, a:(v/1000).toFixed(2)+" L"}};
+        case "L→mL":{const v=randInt(1,10);return {q:`Convert ${v} L to mL`, a:(v*1000)+" mL"}};
+      }
     }
 
-    function renderArticle(a){
-      const level = document.getElementById('level').value;
-      const regionLabel = document.getElementById('region').value || "—";
-      document.getElementById('metaLine').textContent = `Level: ${level} • Region: ${regionLabel}`;
-      document.getElementById('title').textContent = a.title;
-      const textDiv = document.getElementById('text');
-      textDiv.innerHTML = a.text.map(p=>`<p>${p}</p>`).join("");
+    function genTime(){
+      const step=parseInt(document.getElementById('timeStep').value)||5;
+      const system=document.getElementById('timeSystem').value; // '12' or '24'
+      const fmt=document.getElementById('timeFormat').value; // 'digital' | 'analog'
+      const totalMinutes=randInt(0, Math.floor(24*60/step))*step;
+      let h=Math.floor(totalMinutes/60), m=totalMinutes%60;
+      let label;
+      if(system==='12'){
+        const ampm=h>=12? 'PM':'AM';
+        const hh=((h%12)||12).toString().padStart(2,'0');
+        label=`${hh}:${m.toString().padStart(2,'0')} ${ampm}`;
+      } else { label=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
+      if(fmt==='digital') return {q:`What time is this? ${label.replace(/\s?(AM|PM)/,'')}`, a:label};
+      // analog description to avoid needing images
+      const hourPos=(h%12)+(m/60);
+      const minutePos=m/5; // 12 ticks
+      return {q:`Analog clock: hour hand near ${Math.round(hourPos)}; minute hand on ${minutePos*5} minutes. What time is it?`, a:label};
     }
 
-    function renderQuestions(a){
-      const tf = document.getElementById('tfList');
-      const mcq = document.getElementById('mcqList');
-      const sa = document.getElementById('saList');
-      const vocab = document.getElementById('vocabList');
-      const discuss = document.getElementById('discussList');
-      const key = document.getElementById('keyContent');
-
-      tf.innerHTML = a.tf.map((t,i)=>`<li>${t.q} <span class="badge">T / F</span></li>`).join("");
-      mcq.innerHTML = a.mcq.map((m,i)=>{
-        const opts = m.options.map((o,idx)=>`
-          <label><input type="radio" name="mcq_${i}"> ${o}</label>
-        `).join("<br>");
-        return `<li>${m.q}<br>${opts}</li>`;
-      }).join("");
-      sa.innerHTML = a.sa.map(q=>`<li>${q}</li>`).join("");
-      vocab.innerHTML = a.vocab.map(v=>`<li><strong>${v.word}</strong> — <em>${v.hint}</em></li>`).join("");
-      discuss.innerHTML = a.discuss.map(d=>`<li>${d}</li>`).join("");
-
-      // Build answer key
-      const tfKey = a.tf.map((t,i)=>`<li><strong>T/F ${i+1}:</strong> ${t.a}</li>`).join("");
-      const mcKey = a.mcq.map((m,i)=>`<li><strong>MCQ ${i+1}:</strong> ${m.options[m.a]}</li>`).join("");
-      const saKey = (a.key?.sa || []).map((ans,i)=>`<li><strong>SA ${i+1}:</strong> ${ans}</li>`).join("");
-      key.innerHTML = `
-        <h4>True/False</h4><ol>${tfKey}</ol>
-        <h4>Multiple Choice</h4><ol>${mcKey}</ol>
-        <h4>Short Answer (sample responses)</h4><ol>${saKey || "<li>Answers will vary.</li>"}</ol>
-      `;
+    function genThermo(){
+      const scale=document.getElementById('tempScale').value; // C or F
+      // choose classroom-friendly temps
+      const val=(scale==='C')? randInt(-10,40) : randInt(10,105);
+      return {q:`Thermometer reads: ${val} °${scale}. Write the temperature.`, a:`${val}°${scale}`};
     }
 
-    function loadSelected(){
-      const art = getCurrentArticle();
-      if (!art){ return; }
-      renderArticle(art);
-      renderQuestions(art);
+    function genReceipts(){
+      const cur=document.getElementById('currency').value || 'CAD';
+      const items=parseInt(document.getElementById('itemsCount').value)||4;
+      const tax=parseFloat(document.getElementById('taxPct').value)||0;
+      const names=["Apples","Milk","Bread","Pasta","Soup","Bananas","Notebook","Markers","Yogurt","Juice"];
+      let total=0;const lines=[];
+      for(let i=0;i<items;i++){
+        const name=names[randInt(0,names.length-1)];
+        const price=(cur==='JPY'? randInt(50,900) : (randInt(1,120)+randInt(0,99)/100));
+        lines.push(`${name} — ${formatMoney(price,cur)}`);
+        total += price;
+      }
+      const taxAmt = (cur==='JPY'? Math.round(total*tax/100) : +(total*tax/100).toFixed(2));
+      const grand = (cur==='JPY'? Math.round(total+taxAmt) : +(total+taxAmt).toFixed(2));
+      return {q:`🧾 Receipt: ${lines.join('; ')}; Tax ${tax}% → Total = ____`, a:formatMoney(grand,cur)};
     }
 
-    function loadRandom(){
-      const level = document.getElementById('level').value;
-      const list = ARTICLES[level] || [];
-      if (!list.length) return;
-      const pick = list[Math.floor(Math.random()*list.length)];
-      document.getElementById('articleSel').value = pick.id;
-      loadSelected();
+    function genPercent(){
+      const cur=document.getElementById('currency').value || 'CAD';
+      const kind=document.getElementById('percentKind').value; // discount/tip/tax/change
+      if(kind==='discount'){
+        const price=(cur==='JPY'? randInt(500,6000) : (randInt(5,80)+randInt(0,99)/100));
+        const pct=[10,15,20,25,30][randInt(0,4)];
+        const disc=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(price-disc) : +(price-disc).toFixed(2));
+        return {q:`Store sale: ${pct}% off ${formatMoney(price,cur)} → Pay ____`, a:formatMoney(final,cur)};
+      } else if(kind==='tip'){
+        const bill=(cur==='JPY'? randInt(800,8000) : (randInt(10,120)+randInt(0,99)/100));
+        const pct=[10,12,15,18,20][randInt(0,4)];
+        const tipAmt=(cur==='JPY'? Math.round(bill*pct/100) : +(bill*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(bill+tipAmt) : +(bill+tipAmt).toFixed(2));
+        return {q:`Restaurant bill ${formatMoney(bill,cur)} + tip ${pct}% = ____`, a:formatMoney(final,cur)};
+      } else if(kind==='tax'){
+        const price=(cur==='JPY'? randInt(300,9000) : (randInt(5,100)+randInt(0,99)/100));
+        const pct=[5,8,10,12][randInt(0,3)];
+        const taxAmt=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(price+taxAmt) : +(price+taxAmt).toFixed(2));
+        return {q:`Item ${formatMoney(price,cur)} + tax ${pct}% = ____`, a:formatMoney(final,cur)};
+      } else { // change
+        const base=(cur==='JPY'? randInt(500,5000) : (randInt(10,200)+randInt(0,99)/100));
+        const pct=[5,10,20,25,30][randInt(0,4)];
+        const dir=Math.random()<0.5? 'increase':'decrease';
+        const delta=(cur==='JPY'? Math.round(base*pct/100) : +(base*pct/100).toFixed(2));
+        const final=(dir==='increase'? (cur==='JPY'? base+delta : +(base+delta).toFixed(2)) : (cur==='JPY'? base-delta : +(base-delta).toFixed(2)));
+        return {q:`A price ${dir}s by ${pct}%. Original ${formatMoney(base,cur)} → New price ____`, a:formatMoney(final,cur)};
+      }
     }
 
-    // Toggle answer key
-    document.getElementById('toggleKey').addEventListener('change', e=>{
-      document.getElementById('answerKey').style.display = e.target.checked ? 'block' : 'none';
+    // *** FIX: define genMoney (was missing) ***
+    function genMoney(cur, mode){
+      // cur is one of CAD, USD, EUR, GBP, JPY
+      // mode: 'sum' | 'make' | 'change'
+      if(cur==='JPY'){
+        const amount=randInt(50,5000); // whole yen
+        if(mode==='sum') return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
+        if(mode==='make') return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:makeChange(amount,cur)};
+        // change
+        const paid=[1000,2000,5000,10000][randInt(0,3)];
+        const change=paid-amount;return {q:`Change from ${formatMoney(paid,cur)} for a cost of ${formatMoney(amount,cur)}`, a:formatMoney(change,cur)};
+      } else {
+        const amount=(randInt(1,50)+randInt(0,99)/100); // up to ~$50.xx
+        if(mode==='sum') return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
+        if(mode==='make') return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:makeChange(amount,cur)};
+        const paid=[5,10,20,50,100][randInt(0,4)];
+        const change=+(paid-amount).toFixed(2);
+        return {q:`Change from ${formatMoney(paid,cur)} for a cost of ${formatMoney(amount,cur)}`, a:formatMoney(change,cur)};
+      }
+    }
+
+    // =========== Render ==========
+    function buildPage({pageNum,problems,decor}){
+      const page=document.createElement('div');page.className='page';
+      page.innerHTML=`<div class="worksheet-header">
+        <div>Name: __________________</div>
+        <div>Page ${pageNum}</div>
+        <div>Date: __________</div>
+      </div>
+      <div class="worksheet-grid"></div>`;
+      const grid=page.querySelector('.worksheet-grid');
+      for(const p of problems){
+        const row=document.createElement('div');row.className='problem';
+        const left=document.createElement('div');left.textContent=p.q;
+        const right=document.createElement('div');right.className='decor';
+        if(decor.em) right.textContent=decor.em;
+        if(decor.imgSrc){const img=new Image();img.src=decor.imgSrc;img.alt='';img.className='thumb';right.appendChild(img);} 
+        row.appendChild(left);row.appendChild(right);grid.appendChild(row);
+      }
+      return page;
+    }
+
+    function generate(){
+      const showStatus=(msg)=>{const box=document.getElementById('status');const t=document.getElementById('statusText');t.textContent=msg;box.style.display='block'};
+      try{
+        const mathType=document.getElementById('mathType').value;
+        const pages=Math.max(1,parseInt(document.getElementById('pages').value)||1);
+        const perPage=Math.max(1,parseInt(document.getElementById('perPage').value)||24);
+        const showAnswers=document.getElementById('showAnswers').checked;
+        const aRange=document.getElementById('rangeA').value;
+        const bRange=document.getElementById('rangeB').value;
+        const decor=pickDecor();
+
+        const ws=document.getElementById('worksheet');
+        ws.innerHTML='';
+        const allAnswers=[];
+
+        for(let pg=1;pg<=pages;pg++){
+          const problems=[];
+          for(let i=0;i<perPage;i++){
+            let item;
+            if(['add','sub','mul','div'].includes(mathType)) item=genArithmetic(mathType,aRange,bRange);
+            else if(mathType==='measure') item=genMeasurement();
+            else if(mathType==='money'){
+              const cur=(document.getElementById('currency')||{value:'CAD'}).value;
+              const mode=(document.getElementById('moneyMode')||{value:'sum'}).value;
+              item=genMoney(cur,mode);
+            } else if(mathType==='time') item=genTime();
+            else if(mathType==='thermo') item=genThermo();
+            else if(mathType==='receipts') item=genReceipts();
+            else if(mathType==='percent') item=genPercent();
+            else { item={q:'—',a:''}; }
+            if(!item||!item.q){ item={q:'(no question generated)', a:''}; }
+            problems.push(item); allAnswers.push(item.a);
+          }
+          ws.appendChild(buildPage({pageNum:pg,problems,decor}));
+        }
+
+        if(showAnswers){
+          const key=document.createElement('div');key.className='answer-key';
+          key.innerHTML='<h3>Answer Key</h3>';
+          const ol=document.createElement('ol');
+          allAnswers.forEach(a=>{const li=document.createElement('li');li.textContent=(a!==undefined&&a!==null)?String(a):'';ol.appendChild(li)});
+          key.appendChild(ol);ws.appendChild(key);
+        }
+        showStatus(`Generated ${pages} page(s) × ${perPage} problems (${mathType}).`);
+      } catch(err){
+        console.error(err);
+        alert('Oops—something went wrong. See the Status panel for details.');
+        const msg = (err && err.stack) ? err.stack : String(err);
+        const box=document.getElementById('status');const t=document.getElementById('statusText');t.textContent=msg;box.style.display='block';
+      }
+    } else if(mathType==='time') item=genTime();
+          else if(mathType==='thermo') item=genThermo();
+          else if(mathType==='receipts') item=genReceipts();
+          else if(mathType==='percent') item=genPercent();
+          else { item={q:'—',a:''}; }
+          problems.push(item); allAnswers.push(item.a);
+        }
+        ws.appendChild(buildPage({pageNum:pg,problems,decor}));
+      }
+
+      if(showAnswers){
+        const key=document.createElement('div');key.className='answer-key';
+        key.innerHTML='<h3>Answer Key</h3>';
+        const ol=document.createElement('ol');
+        allAnswers.forEach(a=>{const li=document.createElement('li');li.textContent=(a!==undefined&&a!==null)?String(a):'';ol.appendChild(li)});
+        key.appendChild(ol);ws.appendChild(key);
+      }
+    }
+
+    // =========== UI wiring ==========
+    // Category pills
+    document.querySelectorAll('.pill').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const type=btn.getAttribute('data-type');
+        document.getElementById('mathType').value=type;
+        refreshOptionVisibility();
+        window.scrollTo({top:document.getElementById('mathSection').offsetTop-10, behavior:'smooth'});
+      });
     });
 
-    // Print
-    document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
-
-    // Load buttons
-    document.getElementById('btnLoad').addEventListener('click', loadSelected);
-    document.getElementById('btnRandom').addEventListener('click', loadRandom);
-
-    // Re-populate when level or region changes
-    document.getElementById('level').addEventListener('change', ()=>{
-      populateArticles();
-      // auto-select first and load
-      const sel = document.getElementById('articleSel');
-      if (sel.options.length){ sel.selectedIndex = 0; loadSelected(); }
-    });
-    document.getElementById('region').addEventListener('input', ()=>{
-      populateArticles();
-      const sel = document.getElementById('articleSel');
-      if (sel.options.length){ sel.selectedIndex = 0; loadSelected(); }
-    });
-
-    // Initial setup
-    populateArticles();
-    if (document.getElementById('articleSel').options.length){
-      document.getElementById('articleSel').selectedIndex = 0;
-      loadSelected();
+    function refreshOptionVisibility(){
+      const val=document.getElementById('mathType').value;
+      document.getElementById('moneyRow').style.display = (val==='money' || val==='receipts' || val==='percent') ? 'flex' : 'none';
+      document.getElementById('timeRow').style.display = (val==='time') ? 'flex' : 'none';
+      document.getElementById('thermoRow').style.display = (val==='thermo') ? 'flex' : 'none';
+      document.getElementById('receiptsRow').style.display = (val==='receipts') ? 'flex' : 'none';
+      document.getElementById('percentRow').style.display = (val==='percent') ? 'flex' : 'none';
+      document.getElementById('numRanges').style.display = (['add','sub','mul','div'].includes(val))? 'block' : 'none';
+      document.getElementById('mathHeading').textContent = `Worksheet Options — ${val}`;
     }
+
+    document.getElementById('mathType').addEventListener('change',refreshOptionVisibility);
+    document.getElementById('btnGenerate').addEventListener('click',generate);
+    document.getElementById('btnPrint').addEventListener('click',()=>window.print());
+
+    // Self‑test (existing tests preserved) + new money test
+    document.getElementById('btnSelfTest').addEventListener('click',()=>{
+      console.clear();
+      console.log('— Self‑Test start —');
+      console.assert(JSON.stringify(parseRange('0-10'))===JSON.stringify([0,10]),'parseRange basic');
+      console.assert(JSON.stringify(parseRange('10-0'))===JSON.stringify([0,10]),'parseRange order');
+      console.assert(typeof genArithmetic('add','0-5','0-5').a==='number','arithmetic answer number');
+      console.assert(typeof genMeasurement().q==='string','measurement question string');
+      console.assert(typeof genTime().a==='string','time answer');
+      console.assert(typeof genThermo().a==='string','thermo answer');
+      console.assert(typeof genReceipts().a==='string','receipts answer');
+      console.assert(typeof genPercent().a==='string','percent answer');
+      console.assert(typeof genMoney('CAD','sum').a==='string','money answer');
+      console.assert(formatMoney(3.5,'CAD')==='$3.50','CAD format');
+      console.assert(formatMoney(3500,'JPY').startsWith('¥'),'JPY format');
+      console.assert(makeChange(4.75,'USD').length>0,'change maker');
+      console.log('— Self‑Test complete —');
+      alert('Self‑Test complete. Open console for details.');
+    });
+
+    // Initialize
+    refreshOptionVisibility();
+
+    // Global error trap so silent errors show up in the Status box
+    window.addEventListener('error', (e)=>{
+      const box=document.getElementById('status');const t=document.getElementById('statusText');
+      t.textContent = `Runtime error: ${e.message}
+` + (e.error && e.error.stack ? e.error.stack : '');
+      box.style.display='block';
+    });
   </script>
 </body>
 </html>
+
