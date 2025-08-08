@@ -555,24 +555,33 @@ async function translateTextLocalLanguage(text, langCodeOrName){
     }
 
     function genReceipts(){
-      const cur=document.getElementById('currency').value || 'CAD';
-      const items=parseInt(document.getElementById('itemsCount').value)||4;
-      const pst=parseFloat(document.getElementById('pstPct').value)||0;
-      const gst=parseFloat(document.getElementById('gstPct').value)||0;
-      const names=["Apples","Milk","Bread","Pasta","Soup","Bananas","Notebook","Markers","Yogurt","Juice"];
-      let sub=0;const lines=[];
-      for(let i=0;i<items;i++){
-        const name=names[randInt(0,names.length-1)];
-        const icon=receiptEmojis[name]||'';
-        const price=(cur==='JPY'? randInt(50,900) : (randInt(1,120)+randInt(0,99)/100));
-        lines.push(`${icon} ${name} — ${formatMoney(price,cur)}`);
-        sub += price;
-      }
-      const pstAmt = (cur==='JPY'? Math.round(sub*pst/100) : +(sub*pst/100).toFixed(2));
-      const gstAmt = (cur==='JPY'? Math.round(sub*gst/100) : +(sub*gst/100).toFixed(2));
-      const taxAmt = (cur==='JPY'? pstAmt+gstAmt : +(pstAmt+gstAmt).toFixed(2));
-      const grand  = (cur==='JPY'? Math.round(sub+taxAmt) : +(sub+taxAmt).toFixed(2));
-      return {q:`🧾 Receipt: ${lines.join('; ')}; PST ${pst}% + GST/HST ${gst}% → Total = ____`, a:formatMoney(grand,cur)};
+  const cur=document.getElementById('currency').value || 'CAD';
+  const items=parseInt(document.getElementById('itemsCount').value)||4;
+  const pst=parseFloat(document.getElementById('pstPct').value)||0;
+  const gst=parseFloat(document.getElementById('gstPct').value)||0;
+  const names=["Apples","Milk","Bread","Pasta","Soup","Bananas","Notebook","Markers","Yogurt","Juice"];
+
+  let sub=0;
+  const lines=[];
+  for(let i=0;i<items;i++){
+    const name=names[randInt(0,names.length-1)];
+    const icon=receiptEmojis[name]||'';
+    const price=(cur==='JPY'? randInt(50,900) : (randInt(1,120)+randInt(0,99)/100));
+    lines.push(`${icon} ${name} — ${formatMoney(price,cur)}`);
+    sub += price;
+  }
+
+  const pstAmt = (cur==='JPY'? Math.round(sub*pst/100) : +(sub*pst/100).toFixed(2));
+  const gstAmt = (cur==='JPY'? Math.round(sub*gst/100) : +(sub*gst/100).toFixed(2));
+  const taxAmt = (cur==='JPY'? pstAmt+gstAmt : +(pstAmt+gstAmt).toFixed(2));
+  const grand  = (cur==='JPY'? Math.round(sub+taxAmt) : +(sub+taxAmt).toFixed(2));
+
+  return {
+    q:`🧾 Receipt: ${lines.join('; ')}; PST ${pst}% + GST/HST ${gst}% → Total = ____`,
+    a:formatMoney(grand,cur)
+  };
+}
+
     } ${name} — ${formatMoney(price,cur)}`);
         total += price;
       }
@@ -835,26 +844,25 @@ async function translateTextLocalLanguage(text, langCodeOrName){
       if(type==='measure') return header('📏','Convert units')+`<div class='tag'>× or ÷</div><div>300 cm → <strong>3.00 m</strong> (÷100)</div>`;
       if(type==='time') return header('⏰','Read the clock')+`<div class='tag'>Digital/Analog</div><div>02:15 PM → hour 2, minutes 15</div>`;
       if(type==='thermo') return header('🌡️','Read temperature')+`<div class='tag'>Exact value</div><div><strong>18°C</strong></div>`;
-      if(type==='receipts') {
-        const pst = parseFloat(document.getElementById('pstPct').value)||0;
-        const gst = parseFloat(document.getElementById('gstPct').value)||0;
-        const i1Name='Bread', i2Name='Milk';
-        const i1Icon=receiptEmojis[i1Name]||''; const i2Icon=receiptEmojis[i2Name]||'';
-        const p1=(cur==='JPY'? 150 : 2.50);
-        const p2=(cur==='JPY'? 180 : 1.50);
-        const sub=(cur==='JPY'? (p1+p2) : +(p1+p2).toFixed(2));
-        const pstAmt=(cur==='JPY'? Math.round(sub*pst/100) : +(sub*pst/100).toFixed(2));
-        const gstAmt=(cur==='JPY'? Math.round(sub*gst/100) : +(sub*gst/100).toFixed(2));
-        const total=(cur==='JPY'? sub+pstAmt+gstAmt : +(sub+pstAmt+gstAmt).toFixed(2));
-        return header('🧾','Add items then tax')+
-          `<div class='tag'>Step 1</div> ${i1Icon} ${i1Name} ${formatMoney(p1,cur)} + ${i2Icon} ${i2Name} ${formatMoney(p2,cur)} = <strong>${formatMoney(sub,cur)}</strong><br/>`+
-          `<div class='tag'>Step 2</div> PST: ${formatMoney(sub,cur)} × ${pst}% = <strong>${formatMoney(pstAmt,cur)}</strong><br/>`+
-          `<div class='tag'>Step 3</div> GST/HST: ${formatMoney(sub,cur)} × ${gst}% = <strong>${formatMoney(gstAmt,cur)}</strong><br/>`+
-          `<div class='tag'>Step 4</div> Total: ${formatMoney(sub,cur)} + ${formatMoney(pstAmt,cur)} + ${formatMoney(gstAmt,cur)} = <strong>${formatMoney(total,cur)}</strong>`;
-      } ${i1Name} ${formatMoney(p1,cur)} + ${i2Icon} ${i2Name} ${formatMoney(p2,cur)} = <strong>${formatMoney(sub,cur)}</strong><br/>`+
-          `<div class='tag'>Step 2</div> Tax: ${formatMoney(sub,cur)} × ${tax}% = <strong>${formatMoney(taxAmt,cur)}</strong><br/>`+
-          `<div class='tag'>Step 3</div> Total: ${formatMoney(sub,cur)} + ${formatMoney(taxAmt,cur)} = <strong>${formatMoney(total,cur)}</strong>`;
-      }
+     if(type==='receipts') {
+  const pst = parseFloat(document.getElementById('pstPct').value)||0;
+  const gst = parseFloat(document.getElementById('gstPct').value)||0;
+  const i1Name='Bread', i2Name='Milk';
+  const i1Icon=receiptEmojis[i1Name]||''; 
+  const i2Icon=receiptEmojis[i2Name]||'';
+  const p1=(cur==='JPY'? 150 : 2.50);
+  const p2=(cur==='JPY'? 180 : 1.50);
+  const sub=(cur==='JPY'? (p1+p2) : +(p1+p2).toFixed(2));
+  const pstAmt=(cur==='JPY'? Math.round(sub*pst/100) : +(sub*pst/100).toFixed(2));
+  const gstAmt=(cur==='JPY'? Math.round(sub*gst/100) : +(sub*gst/100).toFixed(2));
+  const total=(cur==='JPY'? sub+pstAmt+gstAmt : +(sub+pstAmt+gstAmt).toFixed(2));
+  return header('🧾','Add items then tax')+
+    `<div class='tag'>Step 1</div> ${i1Icon} ${i1Name} ${formatMoney(p1,cur)} + ${i2Icon} ${i2Name} ${formatMoney(p2,cur)} = <strong>${formatMoney(sub,cur)}</strong><br/>`+
+    `<div class='tag'>Step 2</div> PST: ${formatMoney(sub,cur)} × ${pst}% = <strong>${formatMoney(pstAmt,cur)}</strong><br/>`+
+    `<div class='tag'>Step 3</div> GST/HST: ${formatMoney(sub,cur)} × ${gst}% = <strong>${formatMoney(gstAmt,cur)}</strong><br/>`+
+    `<div class='tag'>Step 4</div> Total: ${formatMoney(sub,cur)} + ${formatMoney(pstAmt,cur)} + ${formatMoney(gstAmt,cur)} = <strong>${formatMoney(total,cur)}</strong>`;
+}
+
       if(type==='percent') return header('🛍️','Percent')+`<div class='tag'>of price</div><div>$20, 25% off → $15</div>`;
       if(type==='word') return header('📝','What to do')+`<div class='tag'>Read • Think • Solve</div><div>1) Read 😊 2) Underline 🖊️ 3) Decide ➕➖ 4) Answer ✅</div>`;
       return '';
