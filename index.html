@@ -925,7 +925,17 @@ async function translateTextLocalLanguage(text, langCodeOrName){
             else if(mathType==='word') item=genWord();
             else { item={q:'—',a:''}; }
             if(!item||!item.q){ item={q:'(no question generated)', a:''}; }
-            item.q = emojifyQuestion(mathType, item.q);
+          // Emojify and (optionally) local-language render
+item.q = emojifyQuestion(mathType, item.q);
+
+if(document.getElementById('wpLocalLangToggle')?.checked){
+  if(mathType==='word'){
+    const langName = document.getElementById('wpLang').value.trim();
+    // Future: item.q = await translateTextLocalLanguage(item.q, langName);
+    item.q = `[${langName || 'local language'}] ` + item.q;
+  }
+}
+
             problems.push(item); allAnswers.push(item.a);
           }
           ws.appendChild(buildPage({pageNum:pg,problems,decor,exampleHTML,columns}));
