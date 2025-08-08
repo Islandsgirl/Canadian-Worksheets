@@ -756,7 +756,26 @@ async function translateTextLocalLanguage(text, langCodeOrName){
     }
 
     // =========== Render ==========
-    function buildAck(){
+    function function buildAck(){
+  const on=document.getElementById('wpAckToggle').checked;
+  if(!on) return null;
+
+  const sel = document.getElementById('wpNationSelect');
+  const idx = sel && sel.value !== "" ? parseInt(sel.value,10) : -1;
+  const terr = idx>=0 && bcNations[idx] ? bcNations[idx].nation : (document.getElementById('wpTerritory')?.value || "").trim();
+  const lang = document.getElementById('wpLang').value.trim();
+  const phrases=document.getElementById('wpPhrases').value.trim();
+
+  const box=document.createElement('div'); 
+  box.className='ack';
+
+  let text = `We acknowledge that we learn on the traditional territory${terr? ' of ' + terr : ''}.`;
+  if(lang) text += ` We offer respect in ${lang}.`;
+  if(phrases) text += ` Phrases: ${phrases}`;
+  box.textContent = text;
+  return box;
+}
+{
       const on=document.getElementById('wpAckToggle').checked;
       if(!on) return null;
       const terr=document.getElementById('wpTerritory').value.trim();
