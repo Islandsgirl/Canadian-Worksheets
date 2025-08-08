@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pricing & Membership - Canadian Worksheets</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f8f9fa;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .plan-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .plan {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 1.5rem;
+      width: 300px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .plan h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .price {
+      font-size: 1.5rem;
+      color: #27ae60;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    ul li {
+      margin: 0.5rem 0;
+    }
+    button {
+      background: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button:hover {
+      background: #219150;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💳 Pricing & Membership</h1>
+  <p style="text-align:center;">Choose the plan that works for you. Upgrade to unlock all worksheets, answer keys, and PDF downloads.</p>
+
+  <div class="plan-container">
+    <div class="plan">
+      <h2>Free Plan</h2>
+      <div class="price">$0 / month</div>
+      <ul>
+        <li>✅ Limited worksheets</li>
+        <li>✅ Basic math topics</li>
+        <li>🚫 No answer keys</li>
+        <li>🚫 No PDF downloads</li>
+      </ul>
+      <button onclick="alert('You are on the free plan!')">Current Plan</button>
+    </div>
+
+    <div class="plan">
+      <h2>Teacher Premium</h2>
+      <div class="price">$5 / month</div>
+      <ul>
+        <li>✅ Unlimited worksheets</li>
+        <li>✅ All math & language arts topics</li>
+        <li>✅ Answer keys</li>
+        <li>✅ PDF & print downloads</li>
+      </ul>
+      <button onclick="startCheckout('teacher-premium')">Subscribe</button>
+    </div>
+
+    <div class="plan">
+      <h2>School License</h2>
+      <div class="price">$39 / month</div>
+      <ul>
+        <li>✅ 10 teacher accounts</li>
+        <li>✅ Admin dashboard</li>
+        <li>✅ All premium features</li>
+        <li>✅ Priority support</li>
+      </ul>
+      <button onclick="startCheckout('school-license')">Subscribe</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Payments processed securely via Stripe or PayPal.</p>
+  </footer>
+
+  <script>
+    function startCheckout(plan) {
+      alert(`Redirecting to checkout for: ${plan}`);
+      // TODO: Replace with Stripe or PayPal checkout link
+      // Example: window.location.href = 'https://buy.stripe.com/example';
+    }
+  </script>
+</body>
+</html>
