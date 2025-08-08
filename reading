@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student News Reading</title>
+  <style>
+    :root{--bg:#f8f9fa;--card:#fff;--text:#243041;--muted:#6b7280;--border:#d1d5db;--accent:#2563eb;--ok:#16a34a}
+    *{box-sizing:border-box}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);margin:2rem}
+    h1{margin:0 0 1rem}
+    h2{margin:1.25rem 0 .5rem}
+    .section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem}
+    .row{display:flex;flex-wrap:wrap;gap:1rem}
+    .col{flex:1;min-width:220px}
+    label{display:block;margin-top:.5rem}
+    input,select,textarea,button{font-size:1rem;margin-top:.25rem}
+    textarea{width:100%;min-height:140px}
+    .btn{background:var(--accent);color:#fff;border:0;border-radius:8px;padding:.6rem .9rem;cursor:pointer}
+    .btn.secondary{background:#6b7280}
+    .btn.ghost{background:#e9eef9;color:#1b3b88}
+    .muted{color:var(--muted);font-size:.9rem}
+
+    .ack{border:1px dashed #9bb3ff;background:#f4f7ff;padding:.75rem;border-radius:8px;margin:.5rem 0}
+    .printable{background:#fff;border:1px solid var(--border);border-radius:10px;padding:1rem;margin-top:1rem}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .qa{margin:.4rem 0}
+    .key{border-top:2px solid #ddd;margin-top:1rem;padding-top:.5rem}
+    .pill{display:inline-block;background:#eef;border:1px solid #99a;padding:.15rem .5rem;border-radius:999px;font-size:.85rem;margin:.15rem .25rem 0 0}
+    .status{white-space:pre-wrap;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:.5rem;display:none}
+    .foot{margin-top:2rem;color:var(--muted);font-size:.9rem}
+  </style>
+</head>
+<body>
+  <h1>📰 Student News Reading (Local, leveled)</h1>
+
+  <div class="section">
+    <p class="muted">Paste a news article (or any nonfiction text). Choose a reading level and options, then generate a student-facing lesson with simplified text, emojis (optional), activities, and an answer key — inspired by BreakingNewsEnglish-style tasks.</p>
+    <div class="row">
+      <div class="col">
+        <label for="lvl">Reading level</label>
+        <select id="lvl">
+          <option value="a1">A1 (very easy)</option>
+          <option value="a2" selected>A2 (easy)</option>
+          <option value="b1">B1 (medium)</option>
+          <option value="b2">B2 (upper)</option>
+        </select>
+        <label for="emojiLevel">Emoji support</label>
+        <select id="emojiLevel">
+          <option value="many">Many 😊</option>
+          <option value="some" selected>Some 🙂</option>
+          <option value="none">None</option>
+        </select>
+        <label for="sentCap">Max sentences (simplified article)</label>
+        <input id="sentCap" type="number" value="8" min="3" max="20" />
+      </div>
+      <div class="col">
+        <label for="town">Town / City</label>
+        <input id="town" placeholder="e.g., Courtenay"/>
+        <label for="prov">Province / State</label>
+        <input id="prov" placeholder="e.g., BC"/>
+        <label for="country">Country</label>
+        <input id="country" placeholder="e.g., Canada"/>
+      </div>
+      <div class="col">
+        <label><input type="checkbox" id="ackToggle" checked/> Include territorial acknowledgement</label>
+        <label for="territory">Territory / Nation(s)</label>
+        <input id="territory" placeholder="e.g., K’ómoks First Nation"/>
+        <label for="lang">Local language (optional)</label>
+        <input id="lang" placeholder="e.g., Ayajuthem"/>
+        <label for="phrases">Phrases (hello/thanks) — optional</label>
+        <textarea id="phrases" placeholder="e.g., čɛčɛ haθɛč (thank you)"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>1) Paste article text</h2>
+    <textarea id="src" placeholder="Paste the article text here. Tip: copy the body text — links may be blocked by CORS."></textarea>
+    <div class="controls"><button class="btn" id="gen">Generate Lesson</button> <button class="btn secondary" id="print">Print / Save PDF</button> <button class="btn secondary" id="selftest">Self‑Test</button></div>
+    <p class="muted">We do not store your text. All processing happens in the browser.</p>
+    <div id="status" class="status"></div>
+  </div>
+
+  <div id="out" class="printable" style="display:none"></div>
+
+  <div class="foot">Privacy: This page runs entirely client‑side. No article text is sent to a server. Use rights‑safe content.</div>
+
+<script>
+// ===== Utility =====
+const S = (sel)=>document.querySelector(sel);
+const E = (tag, cls)=>{const el=document.createElement(tag); if(cls) el.className=cls; return el};
+const randInt=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const stopwords=new Set("a,an,the,of,to,in,for,with,as,by,on,at,from,that,this,these,those,and,or,if,then,so,but,is,are,was,were,be,been,being,has,have,had,do,does,did,can,could,should,would,may,might,will,just,about,over,under,between,into,after,before,more,most,less,least,very,not,no,than,other,which,who,whom,whose,what,when,where,why,how,up,down,out,off,again,further,here,there".split(","));
+
+const synonymMap={
+  children:"kids", purchase:"buy", approximately:"about", attempt:"try", assist:"help",
+  commence:"start", conclude:"finish", utilize:"use", residence:"home", vehicle:"car",
+  numerous:"many", sufficient:"enough", require:"need", inform:"tell", locate:"find",
+  demonstration:"protest", exhibition:"show", individual:"person"
+};
+
+const emojiSets={
+  many:["😀","📣","📍","🏫","🌧️","🌞","🌲","🛒","🚗","🚌","🚲","🏒","🏀","🏈","🌊","🐟"],
+  some:["📍","🏫","🛒","🚗","🌲","🌞"],
+  none:[]
+};
+
+function sentenceSplit(text){
+  return text
+    .replace(/\s+/g,' ')
+    .match(/[^.!?]+[.!?]?/g) || [];
+}
+
+function clampLevel(lvl){
+  const map={a1:6,a2:10,b1:16,b2:22}; // approx max words per sentence
+  return map[lvl]||12;
+}
+
+function simplifySentence(s,lvl){
+  // lowercase proper nouns less aggressively; keep numbers/dates
+  s=s.replace(/\((.*?)\)/g,'').replace(/\s+/g,' ').trim();
+  const maxWords=clampLevel(lvl);
+  let words=s.split(' ');
+  words=words.map(w=>{
+    const bare=w.toLowerCase().replace(/[^a-z]/g,'');
+    if(synonymMap[bare]){
+      const repl=synonymMap[bare];
+      return w[0]===w[0].toUpperCase()? (repl[0].toUpperCase()+repl.slice(1)) : repl;
+    }
+    return w;
+  });
+  if(words.length>maxWords){ words=words.slice(0,maxWords); if(!/[.!?]$/.test(words[words.length-1])) words.push('.'); }
+  return words.join(' ');
+}
+
+function addEmojis(text, pref){
+  if(pref==='none') return text;
+  const em=emojiSets[pref]||[];
+  if(em.length===0) return text;
+  // place up to 3 emojis based on keywords
+  const rules=[{k:/school|class|teacher|student/i,e:"🏫"},{k:/rain|storm|snow/i,e:"🌧️"},{k:/sun|hot|summer/i,e:"🌞"},{k:/forest|park|tree/i,e:"🌲"},{k:/shop|store|market|buy/i,e:"🛒"},{k:/car|traffic|road/i,e:"🚗"},{k:/bus/i,e:"🚌"},{k:/ocean|beach|coast/i,e:"🌊"}];
+  let out=text; let used=0;
+  for(const r of rules){ if(r.k.test(text)&&!out.includes(r.e)){ out += ' '+r.e; used++; if(used>=3) break; } }
+  if(used===0){ out += ' '+em[randInt(0,em.length-1)]; }
+  return out;
+}
+
+function simplifyText(src, lvl, emojiPref, cap){
+  const sents=sentenceSplit(src).filter(x=>x.trim().length>0);
+  const out=[];
+  for(const s of sents){
+    const ss=simplifySentence(s,lvl);
+    out.push(addEmojis(ss, emojiPref));
+    if(out.length>=cap) break;
+  }
+  return out;
+}
+
+function topTerms(text,n=8){
+  const freq={};
+  const words=text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/);
+  for(const w of words){ if(!w||stopwords.has(w)||/^[0-9]+$/.test(w)) continue; freq[w]=(freq[w]||0)+1; }
+  return Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,n).map(x=>x[0]);
+}
+
+function makeTrueFalse(sents){
+  const items=[]; const picks=[...sents];
+  while(items.length<5 && picks.length){
+    const s=picks.shift();
+    // flip a number or add NOT
+    let made=false, q=s;
+    const numMatch=s.match(/(\d{1,3})(?!\d)/);
+    if(numMatch){
+      const n=parseInt(numMatch[1],10); const alt = n+1; q=s.replace(numMatch[1], String(alt)); made=true;
+    }
+    if(!made){ q=s.replace(/\bis\b/i,'is not'); }
+    items.push({q, a:false}); // false by construction
+  }
+  return items;
+}
+
+function makeCloze(sents){
+  const text=sents.join(' ');
+  const terms=topTerms(text,6);
+  const blanks=[]; let cloze=text;
+  for(const t of terms){
+    const re=new RegExp(`\\b${t}\\b`,'gi');
+    if(re.test(cloze)){
+      cloze=cloze.replace(re,'_____'); blanks.push(t);
+    }
+  }
+  return {cloze, blanks};
+}
+
+function whFromSentence(s){
+  // Naive: who/what/where/when question
+  if(/\b(\d{4}|January|February|March|April|May|June|July|August|September|October|November|December)\b/i.test(s)) return {q:'When did this happen?', a:s.match(/\b\d{4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\b/i)?.[0]||'—'};
+  if(/\b(in|at|on)\s+[A-Z][a-z]+/.test(s)) return {q:'Where did this happen?', a:s.match(/\b(in|at|on)\s+([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)/)[2]};
+  if(/\bbecause\b/i.test(s)) return {q:'Why did it happen?', a:s.split(/because/i)[1].trim().replace(/[.].*$/,'')};
+  return {q:'What happened?', a:s.replace(/\s*[,;].*$/,'').trim()};
+}
+
+function buildAck(){
+  const on=S('#ackToggle').checked; if(!on) return null;
+  const terr=S('#territory').value.trim();
+  const lang=S('#lang').value.trim();
+  const phrases=S('#phrases').value.trim();
+  const box=E('div','ack');
+  let text=`We acknowledge that we learn on the traditional territory${terr? ' of ' + terr : ''}.`;
+  if(lang) text += ` We offer respect in ${lang}.`;
+  if(phrases) text += ` Phrases: ${phrases}`;
+  box.textContent=text; return box;
+}
+
+function generate(){
+  try{
+    const raw=S('#src').value.trim();
+    if(!raw){ return showStatus('Please paste an article first.'); }
+    const lvl=S('#lvl').value;
+    const emojiPref=S('#emojiLevel').value;
+    const cap=Math.max(3, Math.min(20, parseInt(S('#sentCap').value)||8));
+    const town=S('#town').value.trim();
+    const prov=S('#prov').value.trim();
+    const country=S('#country').value.trim();
+
+    const sents=simplifyText(raw,lvl,emojiPref,cap);
+    const title = (raw.split('\n')[0].slice(0,110)||'Local news').replace(/[^\w\s:;,'"!?()-]/g,'');
+    const tf=makeTrueFalse(sents);
+    const cl=makeCloze(sents);
+    const wh=whFromSentence(sents[0]||'');
+
+    const out=S('#out'); out.innerHTML=''; out.style.display='block';
+
+    const header=E('div');
+    header.innerHTML=`<h2>${title}</h2>`;
+    const ack=buildAck(); if(ack) header.appendChild(ack);
+    if(town||prov||country){
+      const loc=E('div'); loc.className='muted'; loc.textContent=`Location focus: ${[town,prov,country].filter(Boolean).join(', ')}`; header.appendChild(loc);
+    }
+    out.appendChild(header);
+
+    // Article
+    const art=E('div'); art.className='section';
+    art.innerHTML='<h3>Article (simplified)</h3>';
+    for(const s of sents){ const p=E('p'); p.textContent=s; art.appendChild(p); }
+    out.appendChild(art);
+
+    // Activities — two column
+    const acts=E('div'); acts.className='two-col';
+
+    const left=E('div'); left.className='section'; left.innerHTML='<h3>True / False</h3>';
+    tf.forEach((t,i)=>{const p=E('div','qa'); p.textContent=`${i+1}. ${t.q}`; left.appendChild(p)});
+    const vocab=E('div'); vocab.className='section'; vocab.innerHTML='<h3>Vocabulary</h3>';
+    const terms=topTerms(sents.join(' '),8); vocab.appendChild(E('div')).innerHTML=terms.map(x=>`<span class="pill">${x}</span>`).join(' ');
+
+    const right=E('div'); right.className='section'; right.innerHTML='<h3>Cloze (fill the blanks)</h3>';
+    const clp=E('p'); clp.textContent=cl.cloze; right.appendChild(clp);
+    const q2=E('div','section'); q2.innerHTML='<h3>Short Answer</h3>';
+    const wh1=E('div','qa'); wh1.textContent=`1. ${wh.q}`; q2.appendChild(wh1);
+    const wh2=E('div','qa'); wh2.textContent=`2. What is the article mainly about?`; q2.appendChild(wh2);
+
+    acts.appendChild(left); acts.appendChild(vocab);
+    acts.appendChild(right); acts.appendChild(q2);
+    out.appendChild(acts);
+
+    // Discussion
+    const disc=E('div','section');
+    disc.innerHTML='<h3>Discussion</h3>';
+    const prompts=[
+      'What part of this story matters most to our community?',
+      'How might this news affect people in your town? 😊',
+      'What is one question you still have?',
+      'What action could students take (write, ask, share)?'
+    ];
+    prompts.forEach((t,i)=>{const p=E('div','qa'); p.textContent=(i+1)+'. '+t; disc.appendChild(p)});
+    out.appendChild(disc);
+
+    // Answer key
+    const key=E('div','key'); key.innerHTML='<h3>Answer Key</h3>';
+    const tfk=E('div'); tfk.innerHTML='<strong>True/False:</strong> '+tf.map((t,i)=>`${i+1}) ${t.a ? 'True' : 'False'}`).join('  ');
+    const clkey=E('div'); clkey.innerHTML='<strong>Cloze terms:</strong> '+cl.blanks.join(', ');
+    const whk=E('div'); whk.innerHTML='<strong>Short answers (sample):</strong> '+[wh.a||'—','Main idea: '+(terms[0]||'—')].join(' | ');
+    key.appendChild(tfk); key.appendChild(clkey); key.appendChild(whk);
+    out.appendChild(key);
+
+    showStatus(`Generated lesson with ${sents.length} simplified sentences.`);
+  }catch(err){
+    showStatus('Error: '+(err&&err.message?err.message:String(err)));
+    console.error(err);
+  }
+}
+
+function showStatus(msg){ const box=S('#status'); box.style.display='block'; box.textContent=msg; }
+
+// Print
+S('#print').addEventListener('click',()=>window.print());
+S('#gen').addEventListener('click',generate);
+
+// Self-test
+S('#selftest').addEventListener('click',()=>{
+  console.clear();
+  const sample=`Heavy rain fell in Courtenay on Monday. The river rose by 20 centimeters. City workers closed a park path because it was slippery. Schools stayed open. Many people used the bus instead of cars.`;
+  const sents=simplifyText(sample,'a2','some',6);
+  console.assert(sents.length>0,'simplifyText produced sentences');
+  const tf=makeTrueFalse(sents); console.assert(tf.length>0,'TF items');
+  const cl=makeCloze(sents); console.assert(cl.blanks.length>0,'cloze blanks');
+  showStatus('Self‑Test complete. Check console for details.');
+});
+
+// Global error trap
+window.addEventListener('error',e=>{ showStatus('Runtime error: '+e.message); });
+</script>
+</body>
+</html>
