@@ -3,122 +3,487 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pricing & Membership - Canadian Worksheets</title>
+  <title>Reading Comprehension – Canadian Worksheets</title>
   <style>
-    body {
+    :root{
+      --bg:#f8f9fa;
+      --card:#ffffff;
+      --text:#2c3e50;
+      --muted:#666;
+      --border:#ccc;
+      --accent:#2d7ff9;
+      --ok:#27ae60;
+    }
+    body{
       font-family: Arial, sans-serif;
-      margin: 2rem;
-      background-color: #f8f9fa;
+      margin:2rem;
+      background:var(--bg);
+      color:var(--text);
     }
-    h1 {
-      text-align: center;
-      color: #2c3e50;
+    h1{margin:0 0 1rem;color:var(--text)}
+    .controls, .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      padding:1rem;
+      margin:0 0 1.25rem;
     }
-    .plan-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
+    label{display:block;margin:.5rem 0 .25rem}
+    select, input[type="text"]{
+      width:100%;max-width:420px;padding:.5rem;border:1px solid var(--border);
     }
-    .plan {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      padding: 1.5rem;
-      width: 300px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .row{display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end}
+    .row > div{min-width:200px}
+    button{
+      padding:.6rem .9rem;border:0;background:var(--accent);color:#fff;cursor:pointer;border-radius:4px
     }
-    .plan h2 {
-      text-align: center;
-      margin-bottom: 1rem;
+    button.secondary{background:#6c757d}
+    button.success{background:var(--ok)}
+    .meta{color:var(--muted);font-size:.95rem;margin:.5rem 0 1rem}
+    .article h2{margin:.2rem 0 .2rem}
+    .article p{line-height:1.6}
+    .section-title{margin-top:1rem;border-top:2px solid var(--border);padding-top:.8rem}
+    .qs h3{margin:.8rem 0 .4rem}
+    .qs ol{margin:.3rem 0 1rem}
+    .qs li{margin:.35rem 0}
+    .key{
+      display:none;margin-top:1rem;border-top:2px dashed var(--border);padding-top:.8rem;background:#f4f8ff
     }
-    .price {
-      font-size: 1.5rem;
-      color: #27ae60;
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    ul li {
-      margin: 0.5rem 0;
-    }
-    button {
-      background: #27ae60;
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1rem;
-      width: 100%;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    button:hover {
-      background: #219150;
-    }
-    footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      text-align: center;
-      color: #555;
-    }
+    .inline-controls{display:flex;gap: .75rem;flex-wrap:wrap;margin:.75rem 0}
+    .badge{display:inline-block;background:#eef;border:1px solid #99a;padding:.15rem .4rem;border-radius:.25rem;font-size:.85rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media (max-width:800px){.grid-2{grid-template-columns:1fr}}
+    .small{font-size:.9rem;color:var(--muted)}
+    .hr{height:1px;background:var(--border);margin:1rem 0}
+    .footnote{font-size:.85rem;color:var(--muted)}
+    .visually-hidden{position:absolute;left:-9999px}
   </style>
 </head>
 <body>
 
-  <h1>💳 Pricing & Membership</h1>
-  <p style="text-align:center;">Choose the plan that works for you. Upgrade to unlock all worksheets, answer keys, and PDF downloads.</p>
+  <h1>📚 Reading Comprehension (BreakingNewsEnglish-style)</h1>
 
-  <div class="plan-container">
-    <div class="plan">
-      <h2>Free Plan</h2>
-      <div class="price">$0 / month</div>
-      <ul>
-        <li>✅ Limited worksheets</li>
-        <li>✅ Basic math topics</li>
-        <li>🚫 No answer keys</li>
-        <li>🚫 No PDF downloads</li>
-      </ul>
-      <button onclick="alert('You are on the free plan!')">Current Plan</button>
+  <div class="controls card">
+    <div class="row">
+      <div>
+        <label for="level">Reading level</label>
+        <select id="level">
+          <option value="easy">Easy (A1–A2)</option>
+          <option value="medium" selected>Medium (B1–B2)</option>
+          <option value="hard">Hard (C1+)</option>
+        </select>
+      </div>
+      <div>
+        <label for="region">Region (optional)</label>
+        <input id="region" type="text" placeholder="e.g., Vancouver Island, BC" />
+        <div class="small">Used to pick more local-flavoured articles when available.</div>
+      </div>
+      <div>
+        <label for="articleSel">Article</label>
+        <select id="articleSel"></select>
+      </div>
     </div>
-
-    <div class="plan">
-      <h2>Teacher Premium</h2>
-      <div class="price">$5 / month</div>
-      <ul>
-        <li>✅ Unlimited worksheets</li>
-        <li>✅ All math & language arts topics</li>
-        <li>✅ Answer keys</li>
-        <li>✅ PDF & print downloads</li>
-      </ul>
-      <button onclick="startCheckout('teacher-premium')">Subscribe</button>
-    </div>
-
-    <div class="plan">
-      <h2>School License</h2>
-      <div class="price">$39 / month</div>
-      <ul>
-        <li>✅ 10 teacher accounts</li>
-        <li>✅ Admin dashboard</li>
-        <li>✅ All premium features</li>
-        <li>✅ Priority support</li>
-      </ul>
-      <button onclick="startCheckout('school-license')">Subscribe</button>
+    <div class="inline-controls">
+      <button id="btnLoad">Load Article</button>
+      <button id="btnRandom" class="secondary">Random Article</button>
+      <button id="btnPrint" class="success">Print / Save as PDF</button>
+      <label class="badge"><input id="toggleKey" type="checkbox" /> Show Answer Key</label>
     </div>
   </div>
 
-  <footer>
-    <p>Payments processed securely via Stripe or PayPal.</p>
-  </footer>
+  <div class="card article" id="articleCard">
+    <div class="meta" id="metaLine">Level: — • Region: —</div>
+    <h2 id="title">Choose a level and article to begin</h2>
+    <p id="lead" class="small">Short, student-friendly news passages with simplified language and emojis. Perfect for neurodivergent learners.</p>
+    <div id="text"></div>
+  </div>
+
+  <div class="card qs" id="qsCard" aria-live="polite">
+    <div class="section-title"><strong>Activities</strong></div>
+
+    <div class="grid-2">
+      <div>
+        <h3>1) True / False</h3>
+        <ol id="tfList"></ol>
+      </div>
+      <div>
+        <h3>2) Multiple Choice</h3>
+        <ol id="mcqList"></ol>
+      </div>
+    </div>
+
+    <h3>3) Short Answer</h3>
+    <ol id="saList"></ol>
+
+    <h3>4) Vocabulary</h3>
+    <ol id="vocabList"></ol>
+
+    <h3>5) Discussion</h3>
+    <ol id="discussList"></ol>
+
+    <div class="key" id="answerKey">
+      <h3>✅ Answer Key</h3>
+      <div id="keyContent"></div>
+    </div>
+    <div class="hr"></div>
+    <div class="footnote">Tip: Use the Print button to export as a PDF for students. Toggle the Answer Key off before printing student copies. 😉</div>
+  </div>
 
   <script>
-    function startCheckout(plan) {
-      alert(`Redirecting to checkout for: ${plan}`);
-      // TODO: Replace with Stripe or PayPal checkout link
-      // Example: window.location.href = 'https://buy.stripe.com/example';
+    // ----- Sample data (replace with backend/API later) -----
+    // Each article includes: title, text (paragraphs), tf, mcq, sa, vocab, discuss, answers
+    const ARTICLES = {
+      easy: [
+        {
+          id: "beaver-park",
+          region: ["BC","Vancouver Island","Canada","park"],
+          title: "🦫 Beaver Builds a Small Dam in a City Park",
+          text: [
+            "A beaver built a small dam in a city park. 🌲",
+            "The dam made a tiny pond. Ducks and fish live there now. 🦆🐟",
+            "People visit and take photos. They keep a safe distance. 📸"
+          ],
+          tf: [
+            { q: "A beaver built a dam in the park.", a: "T" },
+            { q: "There are no animals near the pond.", a: "F" },
+            { q: "People take photos from a safe distance.", a: "T" }
+          ],
+          mcq: [
+            { q: "What animal built the dam?", options:["Duck","Beaver","Dog"], a: 1 },
+            { q: "What did the dam make?", options:["A road","A pond","A bridge"], a: 1 }
+          ],
+          sa: [
+            "Where did the beaver build the dam?",
+            "Name one animal that lives near the pond."
+          ],
+          vocab: [
+            { word:"dam", hint:"a wall that holds water" },
+            { word:"pond", hint:"a small body of water" }
+          ],
+          discuss: [
+            "Would you like a pond in your local park? Why or why not?",
+            "How should people act around wild animals?"
+          ],
+          key: {
+            sa: [
+              "In a city park.",
+              "Possible answers: duck, fish (accept reasonable answers)."
+            ]
+          }
+        },
+        {
+          id: "bus-lights",
+          region: ["Canada","schools","safety"],
+          title: "🚌 New Safety Lights for School Buses",
+          text: [
+            "School buses got new, brighter safety lights. 💡",
+            "Drivers can see the bus sooner and stop in time.",
+            "Students feel safer when getting on and off the bus."
+          ],
+          tf: [
+            { q: "School buses got brighter lights.", a: "T" },
+            { q: "Drivers can see the bus later.", a: "F" },
+            { q: "Students feel safer.", a: "T" }
+          ],
+          mcq: [
+            { q: "Who stops in time?", options:["Drivers","Teachers","Parents"], a: 0 }
+          ],
+          sa: [
+            "Why are brighter lights useful?",
+            "When do students feel safer?"
+          ],
+          vocab: [
+            { word:"brighter", hint:"gives more light" },
+            { word:"safer", hint:"more protected" }
+          ],
+          discuss: [
+            "What other ideas could make buses safer?",
+            "How do you get to school?"
+          ],
+          key: {
+            sa: [
+              "Drivers can see the bus sooner.",
+              "When getting on and off the bus."
+            ]
+          }
+        }
+      ],
+      medium: [
+        {
+          id: "beach-clean",
+          region: ["BC","Vancouver Island","Nanaimo","Tofino","Ucluelet","Canada","coast","beach"],
+          title: "🌿 Students Lead Beach Cleanup on Vancouver Island",
+          text: [
+            "A group of local students organized a weekend beach cleanup on Vancouver Island.",
+            "They collected over 100 bags of trash, including plastic bottles and fishing line.",
+            "The students said the goal was to protect wildlife and keep beaches safe for visitors."
+          ],
+          tf: [
+            { q:"The cleanup collected over 100 bags of trash.", a:"T" },
+            { q:"The students wanted to harm wildlife.", a:"F" },
+            { q:"Fishing line and plastic were among the trash.", a:"T" }
+          ],
+          mcq: [
+            { q:"Where did the cleanup happen?", options:["Inland forest","Downtown mall","Vancouver Island beach"], a:2 },
+            { q:"What was a main goal?", options:["Make art","Protect wildlife","Sell plastic"], a:1 }
+          ],
+          sa: [
+            "Name two types of trash they collected.",
+            "Why is a beach cleanup important for local communities?"
+          ],
+          vocab: [
+            { word:"organized", hint:"planned and led" },
+            { word:"wildlife", hint:"animals living in nature" },
+            { word:"visitors", hint:"people who come to a place" }
+          ],
+          discuss: [
+            "Have you participated in a cleanup? What did you learn?",
+            "What everyday habits reduce plastic waste?"
+          ],
+          key: {
+            sa: [
+              "Plastic bottles, fishing line (accept other reasonable items).",
+              "It protects animals and keeps beaches safe and welcoming."
+            ]
+          }
+        },
+        {
+          id: "math-scores",
+          region: ["Canada","schools","education"],
+          title: "📊 Canadian Math Scores Show Improvement",
+          text: [
+            "Recent reports show an improvement in Canadian students’ math scores.",
+            "Teachers say interactive tools and targeted practice helped.",
+            "Schools plan to share successful strategies across districts."
+          ],
+          tf: [
+            { q:"Math scores declined this year.", a:"F" },
+            { q:"Teachers used interactive tools.", a:"T" },
+            { q:"Schools will keep strategies secret.", a:"F" }
+          ],
+          mcq: [
+            { q:"What improved according to reports?", options:["Science scores","Math scores","Art scores"], a:1 },
+            { q:"What helped students?", options:["Interactive tools","Less practice","No homework"], a:0 }
+          ],
+          sa: [
+            "What kind of tools are mentioned?",
+            "Why share strategies across districts?"
+          ],
+          vocab: [
+            { word:"interactive", hint:"students can use it, not just watch" },
+            { word:"strategy", hint:"a plan to reach a goal" }
+          ],
+          discuss: [
+            "Which math tools help you learn best?",
+            "How can schools collaborate more effectively?"
+          ],
+          key: {
+            sa: [
+              "Interactive tools (e.g., apps, whiteboards).",
+              "So more students benefit from what works."
+            ]
+          }
+        }
+      ],
+      hard: [
+        {
+          id:"whale-study",
+          region:["BC","Victoria","Vancouver Island","Pacific","Canada","marine"],
+          title:"🔍 Researchers Track Whale Behaviour off the BC Coast",
+          text:[
+            "Marine researchers deployed acoustic recorders to study whale communication patterns off the coast of British Columbia.",
+            "Preliminary data suggests seasonal differences in calls, possibly linked to migration and feeding grounds.",
+            "The team hopes the findings will inform shipping guidelines to reduce noise and protect whale habitats."
+          ],
+          tf:[
+            { q:"Researchers used acoustic tools to collect data.", a:"T" },
+            { q:"The study found no seasonal differences.", a:"F" },
+            { q:"Findings may guide quieter shipping practices.", a:"T" }
+          ],
+          mcq:[
+            { q:"What did researchers deploy?", options:["Satellites","Acoustic recorders","Fishing nets"], a:1 },
+            { q:"Why are the findings important?", options:["To sell more boats","To inform shipping rules","To ban tourism"], a:1 }
+          ],
+          sa:[
+            "What two factors might explain seasonal differences in calls?",
+            "How could the research help whale habitats?"
+          ],
+          vocab:[
+            { word:"acoustic", hint:"related to sound" },
+            { word:"habitat", hint:"a place where an animal lives" }
+          ],
+          discuss:[
+            "How should governments balance shipping and wildlife protection?",
+            "What technologies can reduce ocean noise?"
+          ],
+          key:{
+            sa:[
+              "Migration and feeding grounds.",
+              "By informing quieter, safer shipping guidelines."
+            ]
+          }
+        },
+        {
+          id:"green-policy",
+          region:["Canada","BC","policy","energy"],
+          title:"💡 Province Announces New Green Energy Policy",
+          text:[
+            "A provincial government introduced incentives for community-scale solar and wind projects.",
+            "Analysts predict faster adoption in rural areas with strong local support.",
+            "Critics call for clear recycling plans for old panels and turbines."
+          ],
+          tf:[
+            { q:"The policy encourages solar and wind projects.", a:"T" },
+            { q:"Adoption is expected to slow down.", a:"F" },
+            { q:"No one mentioned recycling issues.", a:"F" }
+          ],
+          mcq:[
+            { q:"Which projects are incentivized?", options:["Coal","Diesel","Solar and wind"], a:2 }
+          ],
+          sa:[
+            "Where might adoption speed up and why?",
+            "What concern do critics raise?"
+          ],
+          vocab:[
+            { word:"incentive", hint:"a reward that motivates action" },
+            { word:"adoption", hint:"how quickly people start using something" }
+          ],
+          discuss:[
+            "What trade-offs come with renewables?",
+            "How can recycling be built into new policies?"
+          ],
+          key:{
+            sa:[
+              "Rural areas with strong support.",
+              "Recycling plans for panels/turbines."
+            ]
+          }
+        }
+      ]
+    };
+
+    // Populate article dropdown based on level & optional region match
+    function populateArticles(){
+      const level = document.getElementById('level').value;
+      const region = (document.getElementById('region').value || "").toLowerCase();
+      const sel = document.getElementById('articleSel');
+      sel.innerHTML = "";
+
+      const items = ARTICLES[level] || [];
+      // simple region boost: put region-matching articles first
+      const ranked = [...items].sort((a,b)=>{
+        const ra = a.region?.some(r => region && r.toLowerCase().includes(region)) ? 1 : 0;
+        const rb = b.region?.some(r => region && r.toLowerCase().includes(region)) ? 1 : 0;
+        return rb - ra;
+      });
+
+      ranked.forEach(a=>{
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = a.title;
+        sel.appendChild(opt);
+      });
+
+      if (!ranked.length){
+        const opt = document.createElement('option');
+        opt.value = "";
+        opt.textContent = "No articles found for this level.";
+        sel.appendChild(opt);
+      }
+    }
+
+    // Pick current article object
+    function getCurrentArticle(){
+      const level = document.getElementById('level').value;
+      const id = document.getElementById('articleSel').value;
+      const list = ARTICLES[level] || [];
+      return list.find(a => a.id === id) || null;
+    }
+
+    function renderArticle(a){
+      const level = document.getElementById('level').value;
+      const regionLabel = document.getElementById('region').value || "—";
+      document.getElementById('metaLine').textContent = `Level: ${level} • Region: ${regionLabel}`;
+      document.getElementById('title').textContent = a.title;
+      const textDiv = document.getElementById('text');
+      textDiv.innerHTML = a.text.map(p=>`<p>${p}</p>`).join("");
+    }
+
+    function renderQuestions(a){
+      const tf = document.getElementById('tfList');
+      const mcq = document.getElementById('mcqList');
+      const sa = document.getElementById('saList');
+      const vocab = document.getElementById('vocabList');
+      const discuss = document.getElementById('discussList');
+      const key = document.getElementById('keyContent');
+
+      tf.innerHTML = a.tf.map((t,i)=>`<li>${t.q} <span class="badge">T / F</span></li>`).join("");
+      mcq.innerHTML = a.mcq.map((m,i)=>{
+        const opts = m.options.map((o,idx)=>`
+          <label><input type="radio" name="mcq_${i}"> ${o}</label>
+        `).join("<br>");
+        return `<li>${m.q}<br>${opts}</li>`;
+      }).join("");
+      sa.innerHTML = a.sa.map(q=>`<li>${q}</li>`).join("");
+      vocab.innerHTML = a.vocab.map(v=>`<li><strong>${v.word}</strong> — <em>${v.hint}</em></li>`).join("");
+      discuss.innerHTML = a.discuss.map(d=>`<li>${d}</li>`).join("");
+
+      // Build answer key
+      const tfKey = a.tf.map((t,i)=>`<li><strong>T/F ${i+1}:</strong> ${t.a}</li>`).join("");
+      const mcKey = a.mcq.map((m,i)=>`<li><strong>MCQ ${i+1}:</strong> ${m.options[m.a]}</li>`).join("");
+      const saKey = (a.key?.sa || []).map((ans,i)=>`<li><strong>SA ${i+1}:</strong> ${ans}</li>`).join("");
+      key.innerHTML = `
+        <h4>True/False</h4><ol>${tfKey}</ol>
+        <h4>Multiple Choice</h4><ol>${mcKey}</ol>
+        <h4>Short Answer (sample responses)</h4><ol>${saKey || "<li>Answers will vary.</li>"}</ol>
+      `;
+    }
+
+    function loadSelected(){
+      const art = getCurrentArticle();
+      if (!art){ return; }
+      renderArticle(art);
+      renderQuestions(art);
+    }
+
+    function loadRandom(){
+      const level = document.getElementById('level').value;
+      const list = ARTICLES[level] || [];
+      if (!list.length) return;
+      const pick = list[Math.floor(Math.random()*list.length)];
+      document.getElementById('articleSel').value = pick.id;
+      loadSelected();
+    }
+
+    // Toggle answer key
+    document.getElementById('toggleKey').addEventListener('change', e=>{
+      document.getElementById('answerKey').style.display = e.target.checked ? 'block' : 'none';
+    });
+
+    // Print
+    document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+
+    // Load buttons
+    document.getElementById('btnLoad').addEventListener('click', loadSelected);
+    document.getElementById('btnRandom').addEventListener('click', loadRandom);
+
+    // Re-populate when level or region changes
+    document.getElementById('level').addEventListener('change', ()=>{
+      populateArticles();
+      // auto-select first and load
+      const sel = document.getElementById('articleSel');
+      if (sel.options.length){ sel.selectedIndex = 0; loadSelected(); }
+    });
+    document.getElementById('region').addEventListener('input', ()=>{
+      populateArticles();
+      const sel = document.getElementById('articleSel');
+      if (sel.options.length){ sel.selectedIndex = 0; loadSelected(); }
+    });
+
+    // Initial setup
+    populateArticles();
+    if (document.getElementById('articleSel').options.length){
+      document.getElementById('articleSel').selectedIndex = 0;
+      loadSelected();
     }
   </script>
 </body>
