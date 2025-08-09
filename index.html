@@ -251,4 +251,466 @@
     <div class="row" id="thermoRow" style="margin-top:.5rem;display:none;">
       <div class="col">
         <label for="tempScale">Temperature scale</label>
-        <select id="
+        <select id="tempScale">
+          <option value="C">Celsius (°C)</option>
+          <option value="F">Fahrenheit (°F)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- RECEIPTS OPTIONS -->
+    <div class="row" id="receiptsRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="itemsCount">Items per receipt</label>
+        <input id="itemsCount" type="number" min="2" max="8" value="4" />
+      </div>
+      <div class="col">
+        <label for="provinceSelect">Province / Territory (auto-fill tax)</label>
+        <select id="provinceSelect">
+          <option value="BC" selected>BC</option>
+          <option value="AB">AB</option>
+          <option value="SK">SK</option>
+          <option value="MB">MB</option>
+          <option value="ON">ON</option>
+          <option value="QC">QC</option>
+          <option value="NB">NB</option>
+          <option value="NL">NL</option>
+          <option value="NS">NS</option>
+          <option value="PE">PE</option>
+          <option value="YT">YT</option>
+          <option value="NT">NT</option>
+          <option value="NU">NU</option>
+        </select>
+        <span class="muted">Auto-fills PST/QST/RST and GST/HST</span>
+      </div>
+      <div class="col">
+        <label for="pstPct">Provincial tax % (PST/QST/RST)</label>
+        <input id="pstPct" type="number" min="0" max="15" value="7" />
+      </div>
+      <div class="col">
+        <label for="gstPct">Federal tax % (GST/HST)</label>
+        <input id="gstPct" type="number" min="0" max="20" value="5" />
+      </div>
+    </div>
+
+    <!-- PERCENT OPTIONS -->
+    <div class="row" id="percentRow" style="margin-top:.5rem;display:none;">
+      <div class="col">
+        <label for="percentKind">Percent scenario</label>
+        <select id="percentKind">
+          <option value="discount">Store discount</option>
+          <option value="tip">Restaurant tip</option>
+          <option value="tax">Sales tax</option>
+          <option value="change">Increase / Decrease</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DECOR OPTIONS -->
+    <div class="row" style="margin-top:.5rem;">
+      <div class="col">
+        <label for="emojiTheme">Emoji theme (decorations)</label>
+        <select id="emojiTheme">
+          <option value="none">None</option>
+          <option value="animals">Animals 🐾</option>
+          <option value="space">Space 🚀</option>
+          <option value="sports">Sports 🏈</option>
+          <option value="food">Food 🍎</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="imageTheme">Image theme (safe)</label>
+        <select id="imageTheme">
+          <option value="none">None</option>
+          <option value="public_domain">Public-domain icons</option>
+        </select>
+        <span class="muted">Avoid copyrighted characters. Use your own images only if you have rights.</span>
+      </div>
+      <div class="col">
+        <label for="customImg">Custom image URL (optional)</label>
+        <input id="customImg" type="text" placeholder="https://… (must have usage rights)" />
+      </div>
+    </div>
+
+    <div class="controls-inline">
+      <label><input type="checkbox" id="showAnswers"/> Show Answer Key</label>
+      <button class="btn" id="btnGenerate">Generate Worksheet</button>
+      <button class="btn success" id="btnPrint">Print / Save PDF</button>
+      <button class="btn secondary" id="btnSelfTest" title="Run quick checks">Run Self-Test</button>
+    </div>
+  </div>
+
+  <div class="worksheet-preview" id="worksheet"></div>
+
+  <div id="status" class="section" style="display:none; border-color:#f3c7c7; background:#fff7f7">
+    <strong>Status:</strong>
+    <pre id="statusText" style="white-space:pre-wrap;margin:.5rem 0 0"></pre>
+  </div>
+
+  <footer>
+    <h2>Privacy Policy</h2>
+    <p>This website may use cookies for basic functionality. We do not collect personally identifiable information unless you choose to provide it. We will never sell your data to third parties.</p>
+    <p class="muted">Image use note: Do not upload or embed copyrighted character images unless you own or have permission to use them.</p>
+  </footer>
+
+  <script>
+    // =========== Helpers ==========
+    const randInt=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+    const parseRange=(s,def=[0,20])=>{const m=(s||"").trim().match(/^(\-?\d+)\s*[-–]\s*(\-?\d+)$/);if(!m)return def.map(Number);const a=parseInt(m[1],10),b=parseInt(m[2],10);return a<=b?[a,b]:[b,a]};
+
+    const emojiPacks={
+      none:[],
+      animals:["🦊","🐻","🐱","🐶","🦉","🐰"],
+      space:["🚀","🛰️","🪐","🌌","🛸","🌟"],
+      sports:["⚽","🏀","🏈","🎾","🏒","🥋"],
+      food:["🍎","🍔","🍕","🍣","🍪","🍉"]
+    };
+
+    const pdThumbs=[
+      "https://upload.wikimedia.org/wikipedia/commons/3/3f/Transparent_pixel.png"
+    ];
+
+    const receiptEmojis={
+      Apples:"🍎", Milk:"🥛", Bread:"🍞", Pasta:"🍝", Soup:"🍲", Bananas:"🍌", Notebook:"📓", Markers:"🖊️", Yogurt:"🥣", Juice:"🧃"
+    };
+
+    // --- Starter BC Nations dataset (expand as needed) ---
+    const bcNations = [
+      { nation: "Kwakwaka’wakw", lang: "Kwak̓wala", phrases: { hello: "Gilakas’la", thanks: "Gilakas’la" } },
+      { nation: "Nuu-chah-nulth", lang: "Nuučaan̓uɫ (Nuu-chah-nulth)", phrases: { hello: "Čuu", thanks: "čaaʔaa (thank you)" } },
+      { nation: "Coast Salish (Lekwungen)", lang: "Lək̓ʷəŋin̓əŋ (Lekwungen)", phrases: { hello: "Háw’aa", thanks: "HÍSW̱ḴE" } },
+      { nation: "Coast Salish (Hul’q’umi’num’)", lang: "Hul’q’umi’num’", phrases: { hello: "’Uy’ skweyul", thanks: "Huy ch q’u" } },
+      { nation: "Tla’amin Nation", lang: "ƛaʔamɩn (Ayajuthem)", phrases: { hello: "čɛčɛhaθɛč", thanks: "čɛčɛ’snɛ" } },
+      { nation: "Squamish Nation (Sḵwx̱wú7mesh Úxwumixw)", lang: "Sḵwx̱wú7mesh sníchim", phrases: { hello: "Chen kw’enmantumiyap", thanks: "Huy chexw" } },
+      { nation: "Tsilhqot’in Nation", lang: "Tŝilhqot’in", phrases: { hello: "Diniyah", thanks: "Gúntsi" } }
+    ];
+
+    // Canadian tax presets by province/territory
+    const caTaxByProvince = {
+      AB: { pst: 0, gst: 5 },
+      BC: { pst: 7, gst: 5 },
+      SK: { pst: 6, gst: 5 },
+      MB: { pst: 7, gst: 5 },
+      ON: { pst: 0, gst: 13 }, // HST 13
+      QC: { pst: 9.975, gst: 5 }, // QST + GST
+      NB: { pst: 0, gst: 15 }, // HST 15
+      NL: { pst: 0, gst: 15 }, // HST 15
+      NS: { pst: 0, gst: 15 }, // HST 15
+      PE: { pst: 0, gst: 15 }, // HST 15
+      YT: { pst: 0, gst: 5 },
+      NT: { pst: 0, gst: 5 },
+      NU: { pst: 0, gst: 5 }
+    };
+
+    function autofillProvinceTaxes(prov){
+      const r = caTaxByProvince[prov];
+      if(!r) return;
+      document.getElementById('pstPct').value = String(r.pst);
+      document.getElementById('gstPct').value = String(r.gst);
+    }
+
+    const currencyData={
+      CAD:{symbol:"$", code:"CAD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
+      USD:{symbol:"$", code:"USD", denominations:[100,50,20,10,5,2,1,0.25,0.10,0.05]},
+      EUR:{symbol:"€", code:"EUR", denominations:[200,100,50,20,10,5,2,1,0.5,0.2,0.1]},
+      GBP:{symbol:"£", code:"GBP", denominations:[50,20,10,5,2,1,0.5,0.2,0.1]},
+      JPY:{symbol:"¥", code:"JPY", denominations:[10000,5000,2000,1000,500,100,50,10,5,1]}
+    };
+
+    function formatMoney(val, cur){
+      if(cur==="JPY") return `¥${Math.round(val)}`;
+      return `${currencyData[cur].symbol}${val.toFixed(2)}`;
+    }
+
+    function makeChange(amount, cur){
+      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+      let remaining=amount;const out=[];
+      for(const d of denoms){
+        let cnt=0;
+        if(cur==="JPY"){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
+        else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
+        if(cnt>0) out.push(`${cnt}×${(cur==="JPY"? d: formatMoney(d,cur).replace(/^[$€£]/,''))}`);
+      }
+      return out.join(", ");
+    }
+
+    function pickDecor(){
+      const emTheme=document.getElementById('emojiTheme').value;
+      const arr=emojiPacks[emTheme]||[];const em=arr.length?arr[randInt(0,arr.length-1)]:"";
+      const imgTheme=document.getElementById('imageTheme').value;
+      const custom=document.getElementById('customImg').value.trim();
+      let imgSrc="";
+      if(custom) imgSrc=custom; else if(imgTheme==='public_domain') imgSrc=pdThumbs[0];
+      return {em,imgSrc};
+    }
+
+    // =========== Problem generators ==========
+    function genArithmetic(op,aRange,bRange){
+      const [aMin,aMax]=parseRange(aRange);const [bMin,bMax]=parseRange(bRange);
+      const a=randInt(aMin,aMax), b=randInt(bMin,bMax);
+      switch(op){
+        case 'add': return {q:`${a} + ${b} = ____`, a:(a+b)};
+        case 'sub': return {q:`${a} − ${b} = ____`, a:(a-b)};
+        case 'mul': return {q:`${a} × ${b} = ____`, a:(a*b)};
+        case 'div': {
+          const x=randInt(aMin,aMax), y=randInt(Math.max(1,bMin),Math.max(1,bMax));
+          return {q:`${x*y} ÷ ${y} = ____`, a:x};
+        }
+      }
+    }
+
+    function genMeasurement(){
+      const types=["cm→m","m→cm","g→kg","kg→g","mL→L","L→mL"];
+      const t=types[randInt(0,types.length-1)];
+      switch(t){
+        case "cm→m":{const v=randInt(10,5000);return {q:`Convert ${v} cm to m`, a:(v/100).toFixed(2)+" m"}};
+        case "m→cm":{const v=randInt(1,500);return {q:`Convert ${v} m to cm`, a:(v*100)+" cm"}};
+        case "g→kg":{const v=randInt(100,50000);return {q:`Convert ${v} g to kg`, a:(v/1000).toFixed(2)+" kg"}};
+        case "kg→g":{const v=randInt(1,200);return {q:`Convert ${v} kg to g`, a:(v*1000)+" g"}};
+        case "mL→L":{const v=randInt(100,5000);return {q:`Convert ${v} mL to L`, a:(v/1000).toFixed(2)+" L"}};
+        case "L→mL":{const v=randInt(1,10);return {q:`Convert ${v} L to mL`, a:(v*1000)+" mL"}};
+      }
+    }
+
+    function genTime(){
+      const step=parseInt(document.getElementById('timeStep').value)||5;
+      const system=document.getElementById('timeSystem').value;
+      const fmt=document.getElementById('timeFormat').value;
+      const totalMinutes=randInt(0, Math.floor(24*60/step))*step;
+      let h=Math.floor(totalMinutes/60), m=totalMinutes%60;
+      let label;
+      if(system==='12'){
+        const ampm=h>=12? 'PM':'AM';
+        const hh=((h%12)||12).toString().padStart(2,'0');
+        label=`${hh}:${m.toString().padStart(2,'0')} ${ampm}`;
+      } else { label=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`; }
+      if(fmt==='digital') return {q:`What time is this? ${label.replace(/\s?(AM|PM)/,'')}`, a:label};
+      const hourPos=(h%12)+(m/60);
+      const minutePos=m/5;
+      return {q:`Analog clock: hour hand near ${Math.round(hourPos)}; minute hand on ${minutePos*5} minutes. What time is it?`, a:label};
+    }
+
+    function genThermo(){
+      const scale=document.getElementById('tempScale').value;
+      const val=(scale==='C')? randInt(-10,40) : randInt(10,105);
+      return {q:`Thermometer reads: ${val} °${scale}. Write the temperature.`, a:`${val}°${scale}`};
+    }
+
+    function genReceipts(){
+      const cur=document.getElementById('currency').value || 'CAD';
+      const items=parseInt(document.getElementById('itemsCount').value)||4;
+      const pst=parseFloat(document.getElementById('pstPct').value)||0;
+      const gst=parseFloat(document.getElementById('gstPct').value)||0;
+      const names=["Apples","Milk","Bread","Pasta","Soup","Bananas","Notebook","Markers","Yogurt","Juice"];
+
+      let sub=0;
+      const lines=[];
+      for(let i=0;i<items;i++){
+        const name=names[randInt(0,names.length-1)];
+        const icon=receiptEmojis[name]||'';
+        const price=(cur==='JPY'? randInt(50,900) : (randInt(1,120)+randInt(0,99)/100));
+        lines.push(`${icon} ${name} — ${formatMoney(price,cur)}`);
+        sub += price;
+      }
+
+      const pstAmt = (cur==='JPY'? Math.round(sub*pst/100) : +(sub*pst/100).toFixed(2));
+      const gstAmt = (cur==='JPY'? Math.round(sub*gst/100) : +(sub*gst/100).toFixed(2));
+      const taxAmt = (cur==='JPY'? pstAmt+gstAmt : +(pstAmt+gstAmt).toFixed(2));
+      const grand  = (cur==='JPY'? Math.round(sub+taxAmt) : +(sub+taxAmt).toFixed(2));
+
+      return {
+        q:`🧾 Receipt: ${lines.join('; ')}; PST ${pst}% + GST/HST ${gst}% → Total = ____`,
+        a:formatMoney(grand,cur)
+      };
+    }
+
+    function genPercent(){
+      const cur=document.getElementById('currency').value || 'CAD';
+      const kind=document.getElementById('percentKind').value;
+      if(kind==='discount'){
+        const price=(cur==='JPY'? randInt(500,6000) : (randInt(5,80)+randInt(0,99)/100));
+        const pct=[10,15,20,25,30][randInt(0,4)];
+        const disc=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(price-disc) : +(price-disc).toFixed(2));
+        return {q:`Store sale: ${pct}% off ${formatMoney(price,cur)} → Pay ____`, a:formatMoney(final,cur)};
+      } else if(kind==='tip'){
+        const bill=(cur==='JPY'? randInt(800,8000) : (randInt(10,120)+randInt(0,99)/100));
+        const pct=[10,12,15,18,20][randInt(0,4)];
+        const tipAmt=(cur==='JPY'? Math.round(bill*pct/100) : +(bill*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(bill+tipAmt) : +(bill+tipAmt).toFixed(2));
+        return {q:`Restaurant bill ${formatMoney(bill,cur)} + tip ${pct}% = ____`, a:formatMoney(final,cur)};
+      } else if(kind==='tax'){
+        const price=(cur==='JPY'? randInt(300,9000) : (randInt(5,100)+randInt(0,99)/100));
+        const pct=[5,8,10,12][randInt(0,3)];
+        const taxAmt=(cur==='JPY'? Math.round(price*pct/100) : +(price*pct/100).toFixed(2));
+        const final=(cur==='JPY'? Math.round(price+taxAmt) : +(price+taxAmt).toFixed(2));
+        return {q:`Item ${formatMoney(price,cur)} + tax ${pct}% = ____`, a:formatMoney(final,cur)};
+      } else {
+        const base=(cur==='JPY'? randInt(500,5000) : (randInt(10,200)+randInt(0,99)/100));
+        const pct=[5,10,20,25,30][randInt(0,4)];
+        const dir=Math.random()<0.5? 'increase':'decrease';
+        const delta=(cur==='JPY'? Math.round(base*pct/100) : +(base*pct/100).toFixed(2));
+        const final=(dir==='increase'? (cur==='JPY'? base+delta : +(base+delta).toFixed(2)) : (cur==='JPY'? base-delta : +(base-delta).toFixed(2)));
+        return {q:`A price ${dir}s by ${pct}%. Original ${formatMoney(base,cur)} → New price ____`, a:formatMoney(final,cur)};
+      }
+    }
+
+    function listToText(list, cur){
+      return list.map(p=>`${p.n}×${(cur==='JPY'? p.d : formatMoney(p.d,cur).replace(/^[$€£]/,''))}`).join(', ');
+    }
+
+    function combinationsForAmount(amount, cur){
+      const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+      const combos=[];
+      function greedy(target){
+        let remaining=target;const picks=[];
+        for(const d of denoms){
+          let cnt=0;
+          if(cur==='JPY'){cnt=Math.floor(remaining/d);remaining-=cnt*d;}
+          else {cnt=Math.floor((remaining+1e-6)/d);remaining=+(remaining-cnt*d).toFixed(2);} 
+          if(cnt>0)picks.push({d,n:cnt});
+        }
+        return picks;
+      }
+      combos.push(greedy(amount));
+      if(combos[0].length>0){
+        const first=JSON.parse(JSON.stringify(combos[0]));
+        for(let i=0;i<first.length;i++){
+          if(first[i].n>0){
+            first[i].n=Math.max(0,first[i].n-1);
+            let leftover=first[i].d;
+            for(const d of denoms){
+              if(d>=first[i].d) continue;
+              let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
+              if(cnt>0){
+                const ex=first.find(x=>x.d===d); if(ex) ex.n+=cnt; else first.push({d,n:cnt});
+                if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
+              }
+              if(leftover<=0) break;
+            }
+            break;
+          }
+        }
+        combos.push(first.filter(x=>x.n>0));
+      }
+      const second=JSON.parse(JSON.stringify(combos[0]||[]));
+      if(second.length){
+        const idx=randInt(0,second.length-1); if(second[idx].n>0){ second[idx].n--; }
+        let leftover=second[idx]? second[idx].d:0;
+        for(let k=denoms.length-1;k>=0;k--){
+          const d=denoms[k];
+          let cnt=(cur==='JPY'? Math.floor(leftover/d) : Math.floor((leftover+1e-6)/d));
+          if(cnt>0){
+            const ex=second.find(x=>x.d===d); if(ex) ex.n+=cnt; else second.push({d,n:cnt});
+            if(cur==='JPY') leftover-=cnt*d; else leftover=+(leftover-cnt*d).toFixed(2);
+          }
+          if(leftover<=0) break;
+        }
+        combos.push(second.filter(x=>x.n>0));
+      }
+      return combos.map(c=>listToText(c,cur));
+    }
+
+    function populateBills(cur){
+      const map={
+        CAD:[5,10,20,50,100], USD:[5,10,20,50,100], EUR:[5,10,20,50,100,200], GBP:[5,10,20,50], JPY:[1000,2000,5000,10000]
+      };
+      const sel=document.getElementById('billGiven');
+      sel.innerHTML='';
+      (map[cur]||[10,20,50]).forEach(v=>{
+        const opt=document.createElement('option');
+        opt.value=String(v); opt.textContent=(cur==='JPY'? `¥${v}`: `${currencyData[cur].symbol}${v}`);
+        sel.appendChild(opt);
+      });
+    }
+
+    function genMoney(cur, mode){
+      const sumStyle = (document.getElementById('moneySumStyle')?.value) || 'target';
+      const billSel=document.getElementById('billGiven');
+
+      function randomCombo(){
+        const denoms=[...currencyData[cur].denominations].sort((a,b)=>b-a);
+        const picks=[]; let total=(cur==='JPY'?0:0.0);
+        const count=randInt(2, Math.min(4, denoms.length));
+        const chosen=[...denoms].sort(()=>Math.random()-0.5).slice(0,count);
+        for(const d of chosen){
+          const n=randInt(1,3);
+          picks.push({d,n});
+          if(cur==='JPY') total += d*n; else total = +(total + d*n).toFixed(2);
+        }
+        const list = listToText(picks,cur);
+        return {list,total};
+      }
+
+      if(mode==='sum'){
+        if(sumStyle==='coins'){
+          const combo=randomCombo();
+          return {q:`Coins/Bills: ${combo.list} → Total = ____`, a:formatMoney(combo.total,cur)};
+        } else {
+          const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+          return {q:`Count the total: ${formatMoney(amount,cur)}`, a:formatMoney(amount,cur)};
+        }
+      }
+
+      if(mode==='make'){
+        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+        const combos=combinationsForAmount(amount,cur);
+        return {q:`Make this amount: ${formatMoney(amount,cur)}`, a:`e.g., ${combos.join(' • ')}`};
+      }
+
+      if(mode==='change'){
+        const amount=(cur==='JPY'? randInt(50,5000) : (randInt(1,50)+randInt(0,99)/100));
+        let bill = billSel && billSel.value ? parseFloat(billSel.value) : null;
+        if(!bill){
+          const standards = (cur==='JPY'? [1000,2000,5000,10000] : (cur==='EUR'? [5,10,20,50,100,200] : (cur==='GBP'? [5,10,20,50] : [5,10,20,50,100])));
+          bill = standards.find(x=>x>=amount) || standards[standards.length-1];
+        }
+        const change=(cur==='JPY'? bill-amount : +(bill-amount).toFixed(2));
+        return {q:`Change from ${formatMoney(bill,cur)} for a cost of ${formatMoney(amount,cur)}`, a:`${formatMoney(change,cur)} → ${makeChange(change,cur)}`};
+      }
+
+      return {q:'—',a:''};
+    }
+
+    function genWord(){
+      const lvl=document.getElementById('wpLevel').value;
+      const em=document.getElementById('wpEmoji').value;
+      const town=document.getElementById('wpTown').value.trim()||'your town';
+      const prov=document.getElementById('wpProvince').value.trim()||'your province';
+      const country=document.getElementById('wpCountry').value.trim()||'your country';
+      const emMany = (em==='many'); const E = (a,b,c)=> em==='none'? a : (emMany? `${a} ${b} ${c}` : `${a} ${b}`);
+      const nums = lvl==='easy'? [3,5,8,10] : lvl==='hard'? [24,30,45,60] : [8,12,15,20];
+
+      const scenarios=[
+        ()=>{ const n1=randInt(1,nums[2]); const n2=randInt(1,nums[1]); return {q:E('At the market in', '🛒', '🍎')+` ${town}, you buy ${n1} apples and ${n2} oranges. How many pieces of fruit is that?`, a:String(n1+n2)};},
+        ()=>{ const mins=randInt(nums[0],nums[3]); return {q:E('You wait for the bus in', '🚌', '🕒')+` ${prov} for ${mins} minutes. If it arrives at 3:00, what time is it now?`, a:`${mins} min before 3:00`};},
+        ()=>{ const t=randInt(8,30); return {q:E('The pool in', '🏊', '🌡️')+` ${town} is ${t}°C. Yesterday it was ${t-3}°C. What is the change in temperature?`, a:`+3°C`};},
+        ()=>{ const price=randInt(2,10); const qty=randInt(2,6); return {q:E('At a snack stand in', '🌭', '💵')+` ${country}, a hot dog is $${price}. You buy ${qty}. What is the cost before tax?`, a:`$${(price*qty).toFixed(2)}`};}
+      ];
+      return scenarios[randInt(0,scenarios.length-1)]();
+    }
+
+    // =========== Render ==========
+    function buildAck(){
+      const on=document.getElementById('wpAckToggle').checked;
+      if(!on) return null;
+
+      const sel = document.getElementById('wpNationSelect');
+      const idx = sel && sel.value !== "" ? parseInt(sel.value,10) : -1;
+      const terr = idx>=0 && bcNations[idx] ? bcNations[idx].nation : (document.getElementById('wpTerritory')?.value || "").trim();
+      const lang = document.getElementById('wpLang').value.trim();
+      const phrases=document.getElementById('wpPhrases').value.trim();
+
+      const box=document.createElement('div'); 
+      box.className='ack';
+
+      let text = `We acknowledge that we learn on the traditional territory${terr? ' of ' + terr : ''}.`;
+      if(lang) text += ` We offer respect in ${lang}.`;
+      if(phrases) text += ` Phrases: ${phrases}`;
+      box.textContent = text;
+      return box;
+    }
+
+    function emojifyQuestion(type, q){
+      const map={add:'➕ ', sub:'➖ ', mul:'✖️ ', div:'➗ ', measure:'📏 ', time:'⏰ ', thermo:'🌡️ ', receipts:'🧾 ', percent:'🛍️ ', money:'💰 ', word:'📝 '};
+      return (map[type]||'') +
