@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Worksheet Header Test</title>
+</head>
+<body>
+  <h1>Worksheet Header</h1>
+
+  <label>Header language:
+    <select id="label-lang">
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="custom">Custom (Indigenous)</option>
+    </select>
+  </label>
+
+  <div id="custom-box" style="display:none; margin-top:8px">
+    <label>Name: <input id="lbl-name"></label><br><br>
+    <label>Date: <input id="lbl-date"></label><br><br>
+    <label>Instructions: <input id="lbl-instr"></label><br><br>
+    <button id="save">Save labels</button>
+  </div>
+
+  <hr>
+
+  <div id="preview">
+    <label id="labelName">Name</label> <input><br><br>
+    <label id="labelDate">Date</label> <input type="date"><br><br>
+    <label id="labelInstr">Instructions</label><br>
+    <textarea rows="4" cols="40"></textarea>
+  </div>
+
+  <script>
+    const LABELS = { 
+      en:{name:"Name", date:"Date", instr:"Instructions"},
+      fr:{name:"Nom",  date:"Date", instr:"Consignes"} 
+    };
+
+    const sel = document.getElementById('label-lang');
+    const box = document.getElementById('custom-box');
+    const nameIn = document.getElementById('lbl-name');
+    const dateIn = document.getElementById('lbl-date');
+    const instrIn = document.getElementById('lbl-instr');
+    const saveBtn = document.getElementById('save');
+
+    const lName = document.getElementById('labelName');
+    const lDate = document.getElementById('labelDate');
+    const lInstr = document.getElementById('labelInstr');
+
+    function apply() {
+      if (sel.value === 'custom') {
+        lName.textContent  = nameIn.value.trim()  || '—';
+        lDate.textContent  = dateIn.value.trim()  || '—';
+        lInstr.textContent = instrIn.value.trim() || '—';
+      } else {
+        const L = LABELS[sel.value] || LABELS.en;
+        lName.textContent = L.name; 
+        lDate.textContent = L.date; 
+        lInstr.textContent = L.instr;
+      }
+    }
+
+    sel.addEventListener('change', () => {
+      box.style.display = sel.value === 'custom' ? 'block' : 'none';
+      apply();
+    });
+
+    saveBtn.addEventListener('click', () => {
+      apply();
+      saveBtn.textContent = 'Saved ✓';
+      setTimeout(()=> saveBtn.textContent = 'Save labels', 900);
+    });
+
+    apply();
+  </script>
+</body>
+</html>
